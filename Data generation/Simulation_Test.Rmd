@@ -1,0 +1,120 @@
+
+---
+title: "Simulation Test"
+output: html_document
+date: "2023-10-25"
+---
+
+## Libraries
+```{r}
+library(ggplot2)
+library(caTools)
+library(plotly)
+library(MASS)
+```
+
+## Initialize variables
+```{r}
+n <- 1000  # Number of samples in each class
+mu_diseased_1 <- 60  # Mean for first predictor, diseased class
+mu_non_diseased_1 <- 50  # Mean for first predictor, non-diseased class
+mu_diseased_2 <- 70  # Mean for second predictor, diseased class
+mu_non_diseased_2 <- 60  # Mean for second predictor, non-diseased class
+sd <- 10  # Standard deviation
+n_iter <- 100  # Number of iterations for logistic regression
+auc_values <- numeric(n_iter)  # Vector to store AUC values
+sample_ratio <- 0.1  # Proportion of data to use in each logistic regression
+```
+
+## Simulate data
+```{r}
+# Set random seed for reproducibility
+set.seed(123)
+
+# Mean and covariance matrix for diseased class
+mean_diseased <- c(1, 0.5)  # Mean for predictor1 is twice that for predictor2
+cov_diseased <- matrix(c(1, 0.2, 0.2, 1), ncol=2)
+
+# Generate data for diseased class
+diseased_data <- mvrnorm(n, mu = mean_diseased, Sigma = cov_diseased)
+
+# Mean and covariance matrix for non-diseased class
+mean_non_diseased <- c(2, 1)  # Mean for predictor1 is twice that for predictor2
+cov_non_diseased <- matrix(c(1, 0.2, 0.2, 1), ncol=2)
+
+# Generate data for non-diseased class
+non_diseased_data <- mvrnorm(n, mu = mean_non_diseased, Sigma = cov_non_diseased)
+
+# Combine into a single dataset
+data <- data.frame(
+  predictor1 = c(diseased_data[, 1], non_diseased_data[, 1]),
+  predictor2 = c(diseased_data[, 2], non_diseased_data[, 2]),
+  class = c(rep(1, n), rep(0, n))
+)
+
+```
+
+
+
+
+## Plot distributions for Predictor 1 and Predictor 2
+```{r}
+# Plot for Predictor 1
+ggplot(data, aes(x = predictor1, fill = as.factor(class))) +
+  geom_histogram(alpha = 0.5, position = 'identity', bins = 30) +
+  ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 1")
+
+# Plot for Predictor 2
+ggplot(data, aes(x = predictor2, fill = as.factor(class))) +
+  geom_histogram(alpha = 0.5, position = 'identity', bins = 30) +
+  ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 2")
+```
+
+```{r}
+# Calculate densities for class 1 and class 0
+density1 <- with(data[data$class == 1, ], kde2d(predictor1, predictor2, n = 30))
+density0 <- with(data[data$class == 0, ], kde2d(predictor1, predictor2, n = 30))
+
+# Create the interactive 3D plot
+p1 <- plot_ly(z = ~density1$z) %>% 
+  add_surface(
+    x = ~density1$x,
+    y = ~density1$y,
+    colorscale = list(c(0, "red"), list(1, "pink")),
+    opacity = 0.8
+  )
+
+p2 <- plot_ly(z = ~density0$z) %>% 
+  add_surface(
+    x = ~density0$x,
+    y = ~density0$y,
+    colorscale = list(c(0, "blue"), list(1, "lightblue")),
+    opacity = 0.8
+  )
+
+subplot(p1, p2, nrows = 1, shareX = TRUE, shareY = TRUE)
+```
+
+
+## Logistic Regression and AUC calculation
+```{r}
+for(i in 1:n_iter) {
+  # Sample a subset of the data
+  sample_index <- sample(1:nrow(data), sample_ratio * nrow(data))
+  sample_data <- data[sample_index, ]
+  
+  # Run logistic regression with two predictors
+  model <- glm(class ~ predictor1 + predictor2, data = sample_data, family = binomial)
+  
+  # Predict on the same sample set
+  predictions <- predict(model, newdata = sample_data, type = "response")
+  
+  # Calculate AUC
+  auc <- colAUC(predictions, sample_data$class, plotROC = FALSE)
+  auc_values[i] <- auc  # Directly store the AUC value
+}
+
+# Calculate average AUC
+average_auc <- mean(auc_values)
+print(paste("Average AUC: ", round(average_auc, 2)))
+```
