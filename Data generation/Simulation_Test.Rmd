@@ -6,7 +6,7 @@ date: "2023-10-25"
 ---
 
 ## Libraries
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(caTools)
 library(plotly)
@@ -15,45 +15,85 @@ library(MASS)
 
 ## Initialize variables
 ```{r}
-n <- 1000  # Number of samples in each class
-mu_diseased_1 <- 60  # Mean for first predictor, diseased class
-mu_non_diseased_1 <- 50  # Mean for first predictor, non-diseased class
-mu_diseased_2 <- 70  # Mean for second predictor, diseased class
-mu_non_diseased_2 <- 60  # Mean for second predictor, non-diseased class
-sd <- 10  # Standard deviation
-n_iter <- 100  # Number of iterations for logistic regression
-auc_values <- numeric(n_iter)  # Vector to store AUC values
-sample_ratio <- 0.1  # Proportion of data to use in each logistic regression
-```
-
-## Simulate data
-```{r}
 # Set random seed for reproducibility
 set.seed(123)
 
-# Mean and covariance matrix for diseased class
-mean_diseased <- c(1, 0.5)  # Mean for predictor1 is twice that for predictor2
-cov_diseased <- matrix(c(1, 0.2, 0.2, 1), ncol=2)
+auc    <- 0.95                             # AUC
+y      <- 0.1                              # delta sigma 
+z      <- 0.2                              # z 
+p      <- 1                                # proportion of correlated predictors
+npred  <- 3                                # number of predictors
 
-# Generate data for diseased class
-diseased_data <- mvrnorm(n, mu = mean_diseased, Sigma = cov_diseased)
-
-# Mean and covariance matrix for non-diseased class
-mean_non_diseased <- c(2, 1)  # Mean for predictor1 is twice that for predictor2
-cov_non_diseased <- matrix(c(1, 0.2, 0.2, 1), ncol=2)
-
-# Generate data for non-diseased class
-non_diseased_data <- mvrnorm(n, mu = mean_non_diseased, Sigma = cov_non_diseased)
-
-# Combine into a single dataset
-data <- data.frame(
-  predictor1 = c(diseased_data[, 1], non_diseased_data[, 1]),
-  predictor2 = c(diseased_data[, 2], non_diseased_data[, 2]),
-  class = c(rep(1, n), rep(0, n))
-)
-
+n      <- 10000                            # Number of samples in each class
+n_iter <- 400                              # Number of iterations for logistic regression
+auc_values <- numeric(n_iter)              # Vector to store AUC values
+sample_ratio <- 0.2                        # Proportion of data to use in each logistic regression
 ```
 
+
+```{r}
+get_delta_mu <- function(){
+  # based equation A2 in Appendix A 
+  inn = scenario()      # get covariance matrices
+  s0  = inn[[1]]              
+  s1  = inn[[2]]                       
+  A   = inv(s0 + s1)         # calculate matrix A
+  Y   = sum(colSums(A))                  
+  dmu = qnorm(auc) / sqrt(Y)
+  return(dmu)
+}
+
+get_delta_mu()   # 0.6043
+```
+
+```{r}
+scenario <- function(){
+  # set up correlations
+  corr0  <-  matrix(0, npred, npred)         # matrix: set up for cov matrix, 0 on diagonals
+  corr0[1:npred*p, 1:npred*p] = z            # class 0 
+  diag(corr0) = 0
+  corr1  <-  matrix(0, npred, npred)         # matrix: set up for cov matrix, 0 on diagonals
+  corr1[1:npred*p, 1:npred*p] = (1-y)*z      # class 1
+  diag(corr1) = 0
+
+  # covariance structures
+  sigma0 <-  diag(npred)  + corr0            # matrix: cov matrix of class 0 
+  dsig   <-  diag(c(rep(y, npred)))          # matrix: difference in variances between classes 
+  sigma1 <-  diag(npred) - dsig + corr1      # matrix: cov matrix of class 1
+
+  return(list("sigma0"      = sigma0, 
+              "sigma1"      = sigma1))
+}
+```
+
+## Simulate data
+
+Simulate data for diseased class and non-diseased class using a covariance matrix and mean vector using the MASS package. The covariance matrix is chosen such that the two predictors are correlated. The mean vector is chosen such that the diseased class has a higher mean than the non-diseased class for both predictors. The data is then combined into a single dataset.
+```{r}
+# mean structures
+mu0    <-  c(rep(0,npred))            # vector: class 0 means
+mu1    <-  mu0 + get_delta_mu()       # vector: class 1 means 
+
+# covariance structures
+inn = scenario()      # get covariance matrices
+sigma1 <- inn[[2]]         # class 1
+sigma0 <- inn[[1]]         # class 0
+
+# Generate data for diseased class
+diseased_data <- mvrnorm(n, mu = mu1, Sigma = sigma1)
+
+# Generate data for non-diseased class
+non_diseased_data <- mvrnorm(n, mu = mu0, Sigma = sigma0)
+
+# Combine the diseased and non-diseased data
+combined_data <- rbind(diseased_data, non_diseased_data)
+
+# Create data frame with class labels
+data <- data.frame(combined_data, class = c(rep(1, n), rep(0, n)))
+
+# Rename columns to "predictor1", "predictor2", ..., "class"
+colnames(data) <- c(paste0("predictor", 1:(ncol(combined_data))), "class")
+```
 
 
 
@@ -70,7 +110,7 @@ ggplot(data, aes(x = predictor2, fill = as.factor(class))) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 2")
 ```
 
-```{r}
+```{r, warning=FALSE}
 # Calculate densities for class 1 and class 0
 density1 <- with(data[data$class == 1, ], kde2d(predictor1, predictor2, n = 30))
 density0 <- with(data[data$class == 0, ], kde2d(predictor1, predictor2, n = 30))
@@ -92,19 +132,21 @@ p2 <- plot_ly(z = ~density0$z) %>%
     opacity = 0.8
   )
 
-subplot(p1, p2, nrows = 1, shareX = TRUE, shareY = TRUE)
+p <- subplot(p1, p2, nrows = 1, shareX = TRUE, shareY = TRUE)
+p
 ```
 
 
 ## Logistic Regression and AUC calculation
 ```{r}
+# Run logistic regression and calculate AUC for n_iter iterations
 for(i in 1:n_iter) {
   # Sample a subset of the data
   sample_index <- sample(1:nrow(data), sample_ratio * nrow(data))
   sample_data <- data[sample_index, ]
   
   # Run logistic regression with two predictors
-  model <- glm(class ~ predictor1 + predictor2, data = sample_data, family = binomial)
+  model <- glm(class ~ ., data = sample_data, family = binomial)
   
   # Predict on the same sample set
   predictions <- predict(model, newdata = sample_data, type = "response")
@@ -112,9 +154,21 @@ for(i in 1:n_iter) {
   # Calculate AUC
   auc <- colAUC(predictions, sample_data$class, plotROC = FALSE)
   auc_values[i] <- auc  # Directly store the AUC value
+  
+  # Save the model predictors and coefficients to calculate average coefficients
+  if(i == 1) {
+    coefficients <- model$coefficients
+  } else {
+    coefficients <- coefficients + model$coefficients
+  }
+  
 }
 
 # Calculate average AUC
 average_auc <- mean(auc_values)
 print(paste("Average AUC: ", round(average_auc, 2)))
+
+# Calculate average coefficients
+average_coefficients <- coefficients / n_iter
+print(paste("Average coefficients: ", round(average_coefficients, 2)))
 ```
