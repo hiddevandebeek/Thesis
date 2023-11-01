@@ -1,3 +1,8 @@
+---
+title: "Simulation_Test2"
+output: html_document
+date: "2023-10-27"
+---
 
 ---
 title: "Simulation Test"
@@ -18,17 +23,11 @@ library(matlib)
 ```{r}
 # Set random seed for reproducibility
 set.seed(123)
-
-auc    <- 0.8                              # AUC
-y      <- 0.0                              # delta sigma 
-z      <- 0.0                              # z 
-p      <- 1                                # proportion of correlated predictors
-npred  <- 2                                # number of predictors
-
-n      <- 10000                            # Number of samples in each class
-n_iter <- 400                              # Number of iterations for logistic regression
-auc_values <- numeric(n_iter)              # Vector to store AUC values
-sample_ratio <- 0.1                        # Proportion of data to use in each logistic regression
+p      <- 1                               # proportion of correlated predictors
+npred  <- 3                               # number of predictors
+z      <- 0.2                             # z 
+n      <- 100000                            # Number of samples in each class
+a <- 2                                    # the effect size
 ```
 
 calculate sigma0 and sigma1
@@ -38,84 +37,59 @@ scenario <- function(){
   corr0  <-  matrix(0, npred, npred)         # matrix: set up for cov matrix, 0 on diagonals
   corr0[1:npred*p, 1:npred*p] = z            # class 0 
   diag(corr0) = 0
-  corr1  <-  matrix(0, npred, npred)         # matrix: set up for cov matrix, 0 on diagonals
-  corr1[1:npred*p, 1:npred*p] = (1-y)*z      # class 1
-  diag(corr1) = 0
-
   # covariance structures
   sigma0 <-  diag(npred)  + corr0            # matrix: cov matrix of class 0 
-  dsig   <-  diag(c(rep(y, npred)))          # matrix: difference in variances between classes 
-  sigma1 <-  diag(npred) - dsig + corr1      # matrix: cov matrix of class 1
-
-  return(list("sigma0"      = sigma0, 
-              "sigma1"      = sigma1))
+  return(sigma0)
 }
 ```
-
-calculate delta mu
-```{r}
-get_delta_mu <- function(){
-  # based equation A2 in Appendix A 
-  inn = scenario()      # get covariance matrices
-  s0  = inn[[1]]              
-  s1  = inn[[2]]                       
-  A   = inv(s0 + s1)         # calculate matrix A
-  Y   = sum(colSums(A))                  
-  dmu = qnorm(auc) / sqrt(Y)
-  pnorm(dmu* sqrt(Y))
-  return(dmu)
-}
-```
-
 
 
 ## Simulate data
 Simulate data for diseased class and non-diseased class using a covariance matrix and mean vector using the MASS package. The covariance matrix is chosen such that the two predictors are correlated. The mean vector is chosen such that the diseased class has a higher mean than the non-diseased class for both predictors. The data is then combined into a single dataset.
 ```{r}
 # mean structures
-mu0    <-  c(rep(0,npred))            # vector: class 0 means
-mu1    <-  mu0 + get_delta_mu()       # vector: class 1 means 
+mu0 <- c(rep(1,npred))       # vector: class 0 means
 
 # covariance structures
-inn = scenario()      # get covariance matrices
-sigma1 <- inn[[2]]         # class 1
-sigma0 <- inn[[1]]         # class 0
-
-# Generate data for diseased class
-diseased_data <- mvrnorm(n, mu = mu1, Sigma = sigma1)
+sigma0 <- scenario()         # class 0
 
 # Generate data for non-diseased class
-non_diseased_data <- mvrnorm(n, mu = mu0, Sigma = sigma0)
+data <- mvrnorm(n, mu = mu0, Sigma = sigma0) %>%
+  as.data.frame()
 
-# Combine the diseased and non-diseased data
-combined_data <- rbind(diseased_data, non_diseased_data)
+# Rename columns to "predictor1", "predictor2" ,...
+colnames(data) <- c(paste0("predictor", 1:(ncol(data))))
 
-# Create data frame with class labels
-data <- data.frame(combined_data, class = c(rep(1, n), rep(0, n)))
+# Simulate binary y to have Prob(y=1) = 1/[1+exp(-L)]
+L <-  0.4*a*data$predictor1 + 0.2*a*data$predictor2 + 0.1*a*data$predictor3 + 0.1*a*data$predictor1*data$predictor2
 
-# Rename columns to "predictor1", "predictor2", ..., "class"
-colnames(data) <- c(paste0("predictor", 1:(ncol(combined_data))), "class")
+L <- - mean(L) + 0.4*a*data$predictor1 + 0.2*a*data$predictor2 + 0.1*a*data$predictor3 + 0.1*a*data$predictor1*data$predictor2 # 50/50 split
+
+y <- ifelse(runif(n) < plogis(L), 1, 0)
+data <- cbind(data, y)
+
+#proportion y's in data
+prop.table(table(data$y))
 ```
-
-
 
 ## Plot distributions for Predictor 1 and Predictor 2
 ```{r}
 # Plot for Predictor 1
-ggplot(data, aes(x = predictor1, fill = as.factor(class))) +
+ggplot(data, aes(x = predictor1, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 30) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 1")
 
 # Plot for Predictor 2
-ggplot(data, aes(x = predictor2, fill = as.factor(class))) +
+ggplot(data, aes(x = predictor2, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 30) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 2")
 ```
 
+
 ```{r, warning=FALSE}
 # Calculate densities for class 1 and class 0
-density1 <- with(data[data$class == 1, ], kde2d(predictor1, predictor2, n = 30))
-density0 <- with(data[data$class == 0, ], kde2d(predictor1, predictor2, n = 30))
+density1 <- with(data[data$y == 1, ], kde2d(predictor1, predictor2, n = 30))
+density0 <- with(data[data$y == 0, ], kde2d(predictor1, predictor2, n = 30))
 
 # Create the interactive 3D plot
 p1 <- plot_ly(z = ~density1$z) %>% 
@@ -134,13 +108,17 @@ p2 <- plot_ly(z = ~density0$z) %>%
     opacity = 0.8
   )
 
-p <- subplot(p1, p2, nrows = 1, shareX = TRUE, shareY = TRUE)
-p
+plot <- subplot(p1, p2, nrows = 1, shareX = TRUE, shareY = TRUE)
+plot
 ```
 
 
 ## Logistic Regression and checking AUC (to see if it is correct)
-```{r}
+```{r, warning=F}
+n_iter <- 800                              # Number of iterations for logistic regression
+auc_values <- numeric(n_iter)              # Vector to store AUC values
+sample_ratio <- 0.2                        # Proportion of data to use in each logistic regression
+
 # Run logistic regression and calculate AUC for n_iter iterations
 for(i in 1:n_iter) {
   # Sample a subset of the data
@@ -148,13 +126,13 @@ for(i in 1:n_iter) {
   sample_data <- data[sample_index, ]
   
   # Run logistic regression with two predictors
-  model <- glm(class ~ ., data = sample_data, family = binomial)
+  model <- glm(y ~ . + predictor1*predictor2, data = sample_data, family = binomial)
   
   # Predict on the same sample set
   predictions <- predict(model, newdata = sample_data, type = "response")
   
   # Calculate AUC
-  auc <- colAUC(predictions, sample_data$class, plotROC = FALSE)
+  auc <- colAUC(predictions, sample_data$y, plotROC = FALSE)
   auc_values[i] <- auc  # Directly store the AUC value
   
   # Save the model predictors and coefficients to calculate average coefficients
