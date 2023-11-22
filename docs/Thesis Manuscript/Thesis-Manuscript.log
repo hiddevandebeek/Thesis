@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.11.16)  16 NOV 2023 23:03
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.11.16)  22 NOV 2023 22:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1150,12 +1150,12 @@ L3 programming layer <2023-11-09>
 (\end occurred when \iftrue on line 4740 was incomplete)
 (\end occurred when \ifx on line 2 was incomplete) 
 Here is how much of TeX's memory you used:
- 23446 strings out of 476923
- 429703 string characters out of 5804830
- 1947186 words of memory out of 5000000
- 44912 multiletter control sequences out of 15000+600000
+ 23444 strings out of 476923
+ 429690 string characters out of 5804830
+ 1946186 words of memory out of 5000000
+ 44910 multiletter control sequences out of 15000+600000
  567027 words of font info for 112 fonts, out of 8000000 for 9000
  40 hyphenation exceptions out of 8191
- 94i,10n,107p,1014b,519s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,10n,107p,1014b,523s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on Thesis-Manuscript.pdf (3 pages).

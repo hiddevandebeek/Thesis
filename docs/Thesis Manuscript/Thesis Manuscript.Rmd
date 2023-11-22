@@ -10,8 +10,8 @@ address:
 - num: b
   org: Julius Center for Health Sciences and Primary Care, UMC Utrecht, the Netherlands
 corres: "*Hidde van de Beek, Utrecht University. \\email{h.vandebeek@uu.nl}"
-presentaddress: Utrecht University, Utrecht, the Netherlands
-articletype: Research article
+presentaddress: Utrecht University, the Netherlands
+articletype: Research report
 abstract: "-"
 keywords: Simulation study, Information criteria, Internal performance measures, Predictive power, Model selection
 bibliography: references.bib
@@ -29,18 +29,28 @@ Several internal performance measures are available for an estimate of out-of-sa
 
 Concluding, ICs and internal performance measures intend to approximate the data generating model and have the best out-of-sample performance, aiming for the highest predictive power in the total population. We are interested in their ability to choose the correct model when the data generating mechanism is known. Testing the IC success rate  and performance measures (AUROC and $R^2$) for choosing the correct model in different simulation contexts, such as sample size and data quality, may yield information for future prediction modelling choices. The according research question will be: How successful are Information Criteria and internal performance measures in choosing the correct prediction model in different simulated contexts? We expect a difference in these factors and a specific use and integration of the techniques in real life application.
 
-# Analytical plan 
+
+
+# Method
+In this study, we focus on prediction models designed for dichotomous risk prediction, such as disease occurence. To investigate the succes rate of IC and internal performance measures, we simulated data sets with different sample sizes.
+
 The current project will investigate the research question by simulating a range of data sets that differ in context/population (i.e. disease occurence and discriminatory ability). From these populations different sample sizes will be used to see the effect on success rates of selecting the correct model. For these parameters optimal values will be calculated. First these success rates will be evaluated using IC. In the second part internal performance measures will be evaluated for their contextual performance. The population simulations and analysis will be done using High Performance Computers at the University Medical Center Utrecht. We will use Rstudio for version controlled \textbf{\textsf{R}} files of data generation, visualization and analyses [@rcoreteamLanguageEnvironmentStatistical2023b].
 
+## Data generating mechanism
+We simulated data for a setting in which there were 3 covariates (X1–X3). These covariates were simulated from independent standard normal distributions ($\mu = 0, \sigma = 1$). All three affected the outcome. 
 
-# Methods
-In our research, we focused on prediction models designed for dichotomous risk prediction. We used a simulation study to investigate the success rate of choosing the correct model in different simulated contexts. 
 
-For each scenario, we compared the out-of-sample predictive performance (i.e., model performance on data not used to train the model) of prediction models developed using a two-step procedure (section 2.3). This procedure consisted of an imbalance correction step in which the data were pre-processed, and a model training step in which the pre-processed data were used to train a machine learning model. 
 
-All code used to implement the simulation study, and process the results is made publicly available (section 2.6). Ethical approval for this research was granted by the Ethical Review Board of the Faculty of Social and Behavioural Sciences at Utrecht University and is filed under number 23-1780.
 
-## Data generation
+For each scenario, we compared the out-of-sample predictive performance (i.e., model performance on data not used to train the model) of prediction models developed using a two-step procedure (section 2.3). This procedure consisted of an imbalance correction step in which the data were pre-processed, and a model training step in which the pre-processed data were used to train a machine learning model. All code used to implement the simulation study, and process the results is made publicly available (section 2.6). Ethical approval for this research was granted by the Ethical Review Board of the Faculty of Social and Behavioural Sciences at Utrecht University and is filed under number 23-1780.
+
+
+
+
+# Results
+
+
+
 
 
 
