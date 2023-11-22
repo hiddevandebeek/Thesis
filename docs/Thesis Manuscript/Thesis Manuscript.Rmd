@@ -1,0 +1,49 @@
+---
+title: "Decoding Predictive Power: A Simulation Study on Information Criteria vs. Internal Performance Measures"
+runningtitle: How to use
+author:
+- name: H. van de Beek*
+  num: a,b
+address:
+- num: a
+  org: Methods and Statistics, Utrecht University, the Netherlands
+- num: b
+  org: Julius Center for Health Sciences and Primary Care, UMC Utrecht, the Netherlands
+corres: "*Hidde van de Beek, Utrecht University. \\email{h.vandebeek@uu.nl}"
+presentaddress: Utrecht University, Utrecht, the Netherlands
+articletype: Research article
+abstract: "-"
+keywords: Simulation study, Information criteria, Internal performance measures, Predictive power, Model selection
+bibliography: references.bib
+output: rticles::sim_article
+---
+
+# Introduction
+In public health, prediction models have the ability to target preventive interventions to persons at high risk of having or developing a disease (prognosis and diagnosis). In clinical practice, prediction models may inform patients and their doctors on the probability of a diagnosis or prognostic outcome [@moonsPrognosisPrognosticResearch2009]. Identification of patients at high risk can be based on a combination of risk factors, risk indicators or other predictors (e.g. a particular patient characteristic, bio-marker or test result). The performance of these prediction models impacts public health and clinical practice, thus making correct modelling choices crucial [@wesslerTuftsPACEClinical2017].
+
+The traditional approach to medical prediction models uses logistic regression [@steyerbergApplicationsPredictionModels2009]. For model selection, two methodologies are often employed. Information Criteria (IC) -or model selection methods- estimate the information loss when the probability distribution of the true model is approximated by the probability distribution of a candidate model. By minimizing this discrepancy (Kullback-Leibler divergence [@kullbackInformationSufficiency1951]) between these distributions, the goal is to select the model that represents the data generating mechanism. The second methodology is the procedure of using internal model performance measures for estimating the out-of-sample performance of the proposed candidate models. Model performance includes discriminatory ability, calibration and overall accuracy. Commonly used techniques are Area under the Receiver Operated Curve (AUROC) and $R^2$, based on which the best performing proposed model can be selected.
+
+Information criteria, like the Akaike’s information criterion (AIC [@akaikeNewLookStatistical1974]) and the Bayesian information criterion (BIC [@schwarzEstimatingDimensionModel1978]), are both commonly used for model selection in health studies. The AIC and BIC share the same goodness-of-fit term, but the penalty terms differ based on the manner in which the dimension $k$ (number of parameters) and $n$ (sample size) is incorporated: BIC employs a complexity penalization of $k\log n$ as opposed to $2k$ of the AIC. Consequently, BIC tends to choose fitted models that are more parsimonious than those favored by AIC [@neathBayesianInformationCriterion2012]. Conversely, the AIC favours more complex models in large sample setting. Information criteria only provide information about the relative quality between models using the same likelihood function and data set [@chowdhuryVariableSelectionStrategies2020].
+
+Several internal performance measures are available for an estimate of out-of-sample model performance. The AUROC analysis is developed for predictive model selection [@pepeInterpretationROCCurve2000] and is widely adopted in clinical science to assess the model sensitivity and specificity trade-off [@collinsTransparentReportingMultivariable2015]. Bootstrapping is a preferred technique for assessing prediction models using performance measures such as AUROC [@harrellRegressionModelingStrategies2015] [@steyerbergInternalExternalValidation2003], since using the cases from the original analysis sample results in an overly optimistic performance estimate [@ledellComputationallyEfficientConfidence2015]. The AUROC is also criticized for being a semi-proper scoring rule [@zhouRelationshipIncrementalValues2021], which means that the best performance can be attained by a misspecified model. Another performance measure of prediction models is the $R^2$. In ordinary least-squares regression it is interpretable as the proportion of outcome variation, which can be explained by the predictors. Pseudo $R^2$ indices have been developed for logistic regression, such as methods of Cox and Snell [@coxAnalysisBinaryData1989], Nagelkerke [@nagelkerkeNoteGeneralDefinition1991], and McFadden [@mcfaddenConditionalLogitAnalysis1973]. Import to note is that $R^2$ measures increase monotonically with increasing number of covariates even if they have no prognostic value at all [@mittlbockNoteR2Measures2001].
+
+Concluding, ICs and internal performance measures intend to approximate the data generating model and have the best out-of-sample performance, aiming for the highest predictive power in the total population. We are interested in their ability to choose the correct model when the data generating mechanism is known. Testing the IC success rate  and performance measures (AUROC and $R^2$) for choosing the correct model in different simulation contexts, such as sample size and data quality, may yield information for future prediction modelling choices. The according research question will be: How successful are Information Criteria and internal performance measures in choosing the correct prediction model in different simulated contexts? We expect a difference in these factors and a specific use and integration of the techniques in real life application.
+
+# Analytical plan 
+The current project will investigate the research question by simulating a range of data sets that differ in context/population (i.e. disease occurence and discriminatory ability). From these populations different sample sizes will be used to see the effect on success rates of selecting the correct model. For these parameters optimal values will be calculated. First these success rates will be evaluated using IC. In the second part internal performance measures will be evaluated for their contextual performance. The population simulations and analysis will be done using High Performance Computers at the University Medical Center Utrecht. We will use Rstudio for version controlled \textbf{\textsf{R}} files of data generation, visualization and analyses [@rcoreteamLanguageEnvironmentStatistical2023b].
+
+
+# Methods
+In our research, we focused on prediction models designed for dichotomous risk prediction. We used a simulation study to investigate the success rate of choosing the correct model in different simulated contexts. 
+
+For each scenario, we compared the out-of-sample predictive performance (i.e., model performance on data not used to train the model) of prediction models developed using a two-step procedure (section 2.3). This procedure consisted of an imbalance correction step in which the data were pre-processed, and a model training step in which the pre-processed data were used to train a machine learning model. 
+
+All code used to implement the simulation study, and process the results is made publicly available (section 2.6). Ethical approval for this research was granted by the Ethical Review Board of the Faculty of Social and Behavioural Sciences at Utrecht University and is filed under number 23-1780.
+
+## Data generation
+
+
+
+
+
+
