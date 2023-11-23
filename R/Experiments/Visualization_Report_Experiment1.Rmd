@@ -20,6 +20,7 @@ library(parallel)
 library(CalibrationCurves)
 library(caret)
 library(wesanderson)
+library(tidyverse)
 ```
 
 ## Open data
@@ -27,7 +28,7 @@ library(wesanderson)
 data <- readRDS("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_report.rds")
 ```
 
-## Function for imbalanced data
+## Functions
 ```{r}
 sample_data <- function(data, size, perc_ones) {
   
@@ -51,104 +52,34 @@ sample_data <- function(data, size, perc_ones) {
   
   return(sampled_data)
 }
+
+calculate_optimism_corrected_auc <- function(sampled_data, model_formula, n_bootstrap) {
+    naive_auc <- auc(roc(sampled_data$y, predict(glm(model_formula, data = sampled_data, family = "binomial"), type = "response")))
+    optimism_values <- numeric(n_bootstrap)
+
+    for (i in 1:n_bootstrap) {
+      bootstrap_sample <- sample_data(sampled_data, nrow(sampled_data), perc_ones)
+      fitted_model <- glm(model_formula, data = bootstrap_sample, family = "binomial")
+      
+      # AUC on bootstrap sample
+      auc_bootstrap <- auc(roc(bootstrap_sample$y, predict(fitted_model, newdata = bootstrap_sample, type = "response")))
+      
+      # AUC on original sampled data
+      auc_original <- auc(roc(sampled_data$y, predict(fitted_model, newdata = sampled_data, type = "response")))
+      
+      optimism_values[i] <- auc_bootstrap - auc_original
+    }
+
+    naive_auc - mean(optimism_values)
+  }
 ```
 
 
 ## Experiment: Percentage of selecting the correct model
-### in series
-#### Function
-```{r}
-compare_models <- function(data, n_iter, samplesize, perc_ones, n_bootstrap) {
-  model1_aic_count <- 0
-  model1_bic_count <- 0
-  model1_auc_count <- 0
-
-  calculate_optimism_corrected_auc <- function(sampled_data, model_formula) {
-    naive_auc <- auc(roc(sampled_data$y, predict(glm(model_formula, data = sampled_data, family = "binomial"), type = "response")))
-    optimism_values <- numeric(n_bootstrap)
-
-    for (i in 1:n_bootstrap) {
-      bootstrap_sample <- sample_data(sampled_data, nrow(sampled_data), perc_ones)
-      fitted_model <- glm(model_formula, data = bootstrap_sample, family = "binomial")
-      
-      # AUC on bootstrap sample
-      auc_bootstrap <- auc(roc(bootstrap_sample$y, predict(fitted_model, newdata = bootstrap_sample, type = "response")))
-      
-      # AUC on original sampled data
-      auc_original <- auc(roc(sampled_data$y, predict(fitted_model, newdata = sampled_data, type = "response")))
-      
-      optimism_values[i] <- auc_bootstrap - auc_original
-    }
-
-    naive_auc - mean(optimism_values)
-  }
-
-  for (i in 1:n_iter) {
-    # Sample the data using sample_data function
-    sampled_data <- sample_data(data, samplesize, perc_ones)
-    sampled_data$y <- factor(sampled_data$y, levels = c(0, 1))
-
-    # Fit Model 1 and Model 2
-    model1_formula <- y ~ predictor1 + predictor2 + predictor3
-    model2_formula <- y ~ predictor1 + predictor2
-
-    model1 <- glm(model1_formula, data=sampled_data, family="binomial")
-    model2 <- glm(model2_formula, data=sampled_data, family="binomial")
-
-    # Compare AIC and BIC
-    model1_aic_count <- model1_aic_count + (AIC(model1) < AIC(model2))
-    model1_bic_count <- model1_bic_count + (BIC(model1) < BIC(model2))
-
-    # Calculate optimism-corrected AUC for each model
-    auc_model1 <- calculate_optimism_corrected_auc(sampled_data, model1_formula)
-    auc_model2 <- calculate_optimism_corrected_auc(sampled_data, model2_formula)
-
-    # Compare AUC
-    model1_auc_count <- model1_auc_count + (auc_model1 > auc_model2)
-  }
-
-  # Calculate percentages
-  calculate_percentage <- function(count) (count / n_iter) * 100
-  model1_aic_percent <- calculate_percentage(model1_aic_count)
-  model1_bic_percent <- calculate_percentage(model1_bic_count)
-  model1_auc_percent <- calculate_percentage(model1_auc_count)
-
-  # Create and return a table of the results
-  results_table <- data.frame(
-    Model = c("Model 1", "Model 2"),
-    AIC_Percentage = c(model1_aic_percent, 100 - model1_aic_percent),
-    BIC_Percentage = c(model1_bic_percent, 100 - model1_bic_percent),
-    AUC_Percentage = c(model1_auc_percent, 100 - model1_auc_percent)
-  )
-  return(results_table)
-}
-```
-
 ### in parallel
 #### Function
 ```{r}
 compare_models_parallel <- function(data, n_iter, samplesize, perc_ones, n_bootstrap) {
-  
-  calculate_optimism_corrected_auc <- function(sampled_data, model_formula) {
-    naive_auc <- auc(roc(sampled_data$y, predict(glm(model_formula, data = sampled_data, family = "binomial"), type = "response")))
-    optimism_values <- numeric(n_bootstrap)
-
-    for (i in 1:n_bootstrap) {
-      bootstrap_sample <- sample_data(sampled_data, nrow(sampled_data), perc_ones)
-      fitted_model <- glm(model_formula, data = bootstrap_sample, family = "binomial")
-      
-      # AUC on bootstrap sample
-      auc_bootstrap <- auc(roc(bootstrap_sample$y, predict(fitted_model, newdata = bootstrap_sample, type = "response")))
-      
-      # AUC on original sampled data
-      auc_original <- auc(roc(sampled_data$y, predict(fitted_model, newdata = sampled_data, type = "response")))
-      
-      optimism_values[i] <- auc_bootstrap - auc_original
-    }
-
-    naive_auc - mean(optimism_values)
-  }
-
   # Function to be run in each parallel process
   run_iteration <- function(i) {
     sampled_data <- sample_data(data, samplesize, perc_ones)
@@ -162,13 +93,13 @@ compare_models_parallel <- function(data, n_iter, samplesize, perc_ones, n_boots
 
     aic_winner <- ifelse(AIC(model1) < AIC(model2), 1, 2)
     bic_winner <- ifelse(BIC(model1) < BIC(model2), 1, 2)
-    auc_winner <- ifelse(calculate_optimism_corrected_auc(sampled_data, model1_formula) > calculate_optimism_corrected_auc(sampled_data, model2_formula), 1, 2)
+    auc_winner <- ifelse(calculate_optimism_corrected_auc(sampled_data, model1_formula, n_bootstrap) > calculate_optimism_corrected_auc(sampled_data, model2_formula, n_bootstrap), 1, 2)
 
     return(c(aic_winner, bic_winner, auc_winner))
   }
 
   # Determine the number of cores and split the work
-  no_cores <- detectCores() - 1  # Save one core for system stability
+  no_cores <- detectCores() - 3  # Optimal number of cores
   results <- mclapply(1:n_iter, run_iteration, mc.cores = no_cores)
 
    # Process results
@@ -205,15 +136,15 @@ results_list.2 <- list()
 results_list.5 <- list()
 
 for (size in seq(50, 1000, by = 50)) {
-  results_list.05[[paste("compare.05", size, sep = ".")]] <- compare_models_parallel(data, 1000, size, 0.05, 40)
+  results_list.05[[paste("compare.05", size, sep = ".")]] <- compare_models_parallel(data, 2500, size, 0.05, 80)
 }
 
 for (size in seq(50, 1000, by = 50)) {
-  results_list.2[[paste("compare.2", size, sep = ".")]] <- compare_models_parallel(data, 1000, size, 0.2, 40)
+  results_list.2[[paste("compare.2", size, sep = ".")]] <- compare_models_parallel(data, 2500, size, 0.2, 80)
 }
 
 for (size in seq(50, 1000, by = 50)) {
-  results_list.5[[paste("compare.5", size, sep = ".")]] <- compare_models_parallel(data, 1000, size, 0.5, 40)
+  results_list.5[[paste("compare.5", size, sep = ".")]] <- compare_models_parallel(data, 200, size, 0.5, 80)
 }
 ```
 
@@ -233,7 +164,7 @@ create_minimalistic_plot <- function(results_list, title_suffix = "") {
 
   # Create a minimalistic plot
   plot_minimalistic <- ggplot(combined_results_long, aes(x = Sample_Size, y = Percentage, color = Criterion)) +
-    geom_line(size = 1) +  # Solid lines
+    geom_line(linewidth = 1) +  # Solid lines
     scale_color_manual(values = wes_palette("Darjeeling1")) +  # Wes Anderson palette
     theme_minimal(base_size = 14) +  # Minimalistic theme
     theme(legend.position = "bottom",  # Move legend to bottom
