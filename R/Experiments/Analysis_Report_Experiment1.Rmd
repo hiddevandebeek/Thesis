@@ -1,0 +1,152 @@
+---
+title: "Visualization Report"
+author: "Hidde van de Beek"
+date: "2023-11-20"
+output: html_document
+---
+
+
+# Analysis
+
+## Libraries
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(caTools)
+library(plotly)
+library(MASS)
+library(matlib)
+library(pROC)
+library(parallel)
+library(CalibrationCurves)
+library(caret)
+library(tidyverse)
+```
+
+## Open data
+```{r}
+data <- readRDS("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_report.rds")
+```
+
+## Functions
+```{r}
+sample_data <- function(data, size, perc_ones) {
+  
+  # Separate data into two subsets based on y
+  data_0 <- filter(data, y == 0)
+  data_1 <- filter(data, y == 1)
+  
+  # Calculate the number of samples required from each subset
+  num_ones <- round(size * perc_ones)
+  num_zeros <- size - num_ones
+  
+  # Sample from each subset
+  sampled_0 <- sample_n(data_0, min(num_zeros, nrow(data_0)))
+  sampled_1 <- sample_n(data_1, min(num_ones, nrow(data_1)))
+  
+  # Combine the sampled subsets
+  sampled_data <- rbind(sampled_0, sampled_1)
+  
+  # Shuffle the rows
+  sampled_data <- sampled_data[sample(nrow(sampled_data)), ]
+  
+  return(sampled_data)
+}
+```
+
+
+## Experiment: Percentage of selecting the correct model
+### in parallel
+#### Function
+```{r}
+compare_models_parallel <- function(data, n_iter, samplesize, perc_ones, n_bootstrap) {
+  # Function to be run in each parallel process
+  
+  calculate_optimism_corrected_auc <- function(sampled_data, model_formula, n_bootstrap) {
+    naive_auc <- auc(roc(sampled_data$y, predict(glm(model_formula, data = sampled_data, family = "binomial"), type = "response")))
+    optimism_values <- numeric(n_bootstrap)
+
+    for (i in 1:n_bootstrap) {
+      bootstrap_sample <- sample_data(sampled_data, nrow(sampled_data), perc_ones)
+      fitted_model <- glm(model_formula, data = bootstrap_sample, family = "binomial")
+      
+      # AUC on bootstrap sample
+      auc_bootstrap <- auc(roc(bootstrap_sample$y, predict(fitted_model, newdata = bootstrap_sample, type = "response")))
+      
+      # AUC on original sampled data
+      auc_original <- auc(roc(sampled_data$y, predict(fitted_model, newdata = sampled_data, type = "response")))
+      
+      optimism_values[i] <- auc_bootstrap - auc_original
+    }
+
+    naive_auc - mean(optimism_values)
+  }
+  run_iteration <- function(i) {
+    sampled_data <- sample_data(data, samplesize, perc_ones)
+    sampled_data$y <- factor(sampled_data$y, levels = c(0, 1))
+
+    model1_formula <- y ~ predictor1 + predictor2 + predictor3
+    model2_formula <- y ~ predictor1 + predictor2
+
+    model1 <- glm(model1_formula, data=sampled_data, family="binomial")
+    model2 <- glm(model2_formula, data=sampled_data, family="binomial")
+
+    aic_winner <- ifelse(AIC(model1) < AIC(model2), 1, 2)
+    bic_winner <- ifelse(BIC(model1) < BIC(model2), 1, 2)
+    auc_winner <- ifelse(calculate_optimism_corrected_auc(sampled_data, model1_formula, n_bootstrap) > calculate_optimism_corrected_auc(sampled_data, model2_formula, n_bootstrap), 1, 2)
+
+    return(c(aic_winner, bic_winner, auc_winner))
+  }
+
+  # Determine the number of cores and split the work
+  no_cores <- detectCores() - 3  # Optimal number of cores
+  results <- mclapply(1:n_iter, run_iteration, mc.cores = no_cores)
+
+   # Process results
+  results_matrix <- matrix(unlist(results), ncol = 3, byrow = TRUE)
+  model1_aic_count <- sum(results_matrix[, 1] == 1)
+  model1_bic_count <- sum(results_matrix[, 2] == 1)
+  model1_auc_count <- sum(results_matrix[, 3] == 1)
+
+  # Calculate percentages
+  calculate_percentage <- function(count) (count / n_iter) * 100
+  model1_aic_percent <- calculate_percentage(model1_aic_count)
+  model1_bic_percent <- calculate_percentage(model1_bic_count)
+  model1_auc_percent <- calculate_percentage(model1_auc_count)
+  model2_aic_percent <- 100 - model1_aic_percent
+  model2_bic_percent <- 100 - model1_bic_percent
+  model2_auc_percent <- 100 - model1_auc_percent
+
+  # Create and return a table of the results
+  results_table <- data.frame(
+    Model = c("Model 1", "Model 2"),
+    AIC_Percentage = c(model1_aic_percent, model2_aic_percent),
+    BIC_Percentage = c(model1_bic_percent, model2_bic_percent),
+    AUC_Percentage = c(model1_auc_percent, model2_auc_percent)
+  )
+
+  return(results_table)
+}
+```
+
+#### Run
+```{r, message=FALSE, warning=FALSE, cache=T}
+results_list.05 <- list()
+results_list.20 <- list()
+results_list.50 <- list()
+
+for (size in seq(50, 1000, by = 50)) {
+  results_list.05[[paste("compare.05", size, sep = ".")]] <- compare_models_parallel(data, 80, size, 0.05, 10)
+}
+
+for (size in seq(50, 1000, by = 50)) {
+  results_list.20[[paste("compare.2", size, sep = ".")]] <- compare_models_parallel(data, 80, size, 0.2, 10)
+}
+
+for (size in seq(50, 1000, by = 50)) {
+  results_list.50[[paste("compare.5", size, sep = ".")]] <- compare_models_parallel(data, 80, size, 0.5, 10)
+}
+
+saveRDS(results_list.50, "/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_sim50.rds")
+saveRDS(results_list.20, "/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_sim20.rds")
+saveRDS(results_list.05, "/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_sim05.rds")
+```

@@ -66,7 +66,7 @@ colnames(data) <- c(paste0("predictor", 1:(ncol(data))))
 
 # Simulate binary y to have Prob(y=1) = 1/[1+exp(-L)]
 L <-  0.2*a*data$predictor1 + 0.2*a*data$predictor2 + 0.1*a*data$predictor3
-
+mean(L)
 L <- - mean(L) + 0.2*a*data$predictor1 + 0.2*a*data$predictor2 + 0.1*a*data$predictor3 # 50/50 split
 
 y <- ifelse(runif(n) < plogis(L), 1, 0)
