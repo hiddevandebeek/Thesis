@@ -89,21 +89,21 @@ For all sample sizes, the success rate was calculated. This is shown in plot \re
 ```{=tex}
 \begin{figure}[h]
 \centering
-\begin{subfigure}{0.32\textwidth}
-    \includegraphics[width=\textwidth]{"experiment 1 (old)/plot.05.png"}
-    \caption{5\% disease.}
+\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 1/plot.05.png"}
+    \caption{5\% disease occurence.}
     \label{fig:first}
 \end{subfigure}
-\hspace{0cm}
-\begin{subfigure}{0.32\textwidth}
-    \includegraphics[width=\textwidth]{"experiment 1 (old)/plot.2.png"}
-    \caption{20\% disease.}
+\hspace{-0.2cm}
+\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 1/plot.20.png"}
+    \caption{20\% disease occurence.}
     \label{fig:second}
 \end{subfigure}
-\hspace{0cm}
-\begin{subfigure}{0.32\textwidth}
-    \includegraphics[width=\textwidth]{"experiment 1 (old)/plot.5.png"}
-    \caption{50\% disease.}
+\hspace{-0.2cm}
+\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 1/plot.50.png"}
+    \caption{50\% disease occurence.}
     \label{fig:third}
 \end{subfigure}
         

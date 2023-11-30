@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.11.28)  29 NOV 2023 21:28
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.11.28)  30 NOV 2023 20:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1168,12 +1168,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 188--195
  []
 
 [2]
-File: experiment 1 (old)/plot.05.png Graphic file (type bmp)
-<experiment 1 (old)/plot.05.png>
-File: experiment 1 (old)/plot.2.png Graphic file (type bmp)
-<experiment 1 (old)/plot.2.png>
-File: experiment 1 (old)/plot.5.png Graphic file (type bmp)
-<experiment 1 (old)/plot.5.png>
+File: experiment 1/plot.05.png Graphic file (type bmp)
+<experiment 1/plot.05.png>
+File: experiment 1/plot.20.png Graphic file (type bmp)
+<experiment 1/plot.20.png>
+File: experiment 1/plot.50.png Graphic file (type bmp)
+<experiment 1/plot.50.png>
 
 Underfull \hbox (badness 10000) detected at line 264
 []
@@ -1201,7 +1201,7 @@ L3 programming layer <2023-11-09>
 (\end occurred when \ifx on line 2 was incomplete) 
 Here is how much of TeX's memory you used:
  23773 strings out of 476923
- 436083 string characters out of 5804836
+ 435935 string characters out of 5804836
  1948186 words of memory out of 5000000
  45229 multiletter control sequences out of 15000+600000
  567011 words of font info for 110 fonts, out of 8000000 for 9000
