@@ -1,0 +1,157 @@
+---
+title: "Decoding Predictive Performance: A Simulation Study on Information Criteria vs. Internal Performance Measures"
+runningtitle: Decoding Predictive Performance
+author:
+- name: H. van de Beek*
+  num: a,b
+address:
+- num: a
+  org: Methods and Statistics, Utrecht University, the Netherlands
+- num: b
+  org: Julius Center for Health Sciences and Primary Care, UMC Utrecht, the Netherlands
+corres: "*Hidde van de Beek, Utrecht University. \\email{h.vandebeek@uu.nl}"
+presentaddress: Utrecht University, the Netherlands
+articletype: Research article
+authormark: VAN DE BEEK
+title-mark: Decoding Predictive Power
+abstract: |
+  This is a generic template designed for use by multiple journals,
+  which includes several options for customization. Please
+  refer the author guidelines and author LaTeX manuscript preparation document for the journal to which you
+  are submitting in order to confirm that your manuscript will
+  comply with the journal’s requirements. Please replace this
+  text with your abstract. This is sample abstract text just for the template display purpose.
+keywords: Simulation study, Information criteria, Internal performance measures, Predictive power, Model selection
+bibliography: references.bib
+output: 
+  rticles::sim_article:
+  keep_tex: TRUE
+longtable: TRUE    
+header-includes: 
+  - \usepackage{longtable}
+  - \usepackage{float}
+  - \usepackage{subcaption}
+  - \usepackage{graphicx}
+  - \usepackage{adjustbox}
+---
+
+# Introduction
+
+In public health, prediction models have the ability to target preventive interventions to persons at high risk of having or developing a disease (prognosis and diagnosis). In clinical practice, prediction models may inform patients and their doctors on the probability of a diagnosis or prognostic outcome [@moonsPrognosisPrognosticResearch2009]. Identification of patients at high risk can be based on a combination of risk factors, risk indicators or other predictors (e.g. a particular patient characteristic, bio-marker or test result). The performance of these prediction models impacts public health and clinical practice, thus making correct modelling choices crucial [@wesslerTuftsPACEClinical2017].
+
+# Background
+
+The traditional approach to medical prediction models often uses logistic regression [@steyerbergApplicationsPredictionModels2009]. For model selection, two methodologies are often employed. Information Criteria (IC) -or model selection methods- estimate the information loss when the probability distribution of the true model is approximated by the probability distribution of a candidate model. By minimizing this discrepancy (Kullback-Leibler divergence [@kullbackInformationSufficiency1951]) between these distributions, the goal is to select the model that represents the data generating mechanism. The second methodology is the procedure of using internal model performance measures for estimating the out-of-sample performance of the proposed candidate models. Model performance includes discriminatory ability, calibration and overall accuracy. Commonly used techniques are Area under the Receiver Operated Curve (AUROC) and $R^2$, based on which the best performing proposed model can be selected.
+
+Information criteria, like the Akaike's information criterion (AIC [@akaikeNewLookStatistical1974]) and the Bayesian information criterion (BIC [@schwarzEstimatingDimensionModel1978]), are both commonly used for model selection in health studies. The AIC and BIC share the same goodness-of-fit term, but the penalty terms differ based on the manner in which the dimension $k$ (number of parameters) and $n$ (sample size) is incorporated: BIC employs a complexity penalization of $k\log n$ as opposed to $2k$ of the AIC. Consequently, BIC tends to choose fitted models that are more parsimonious than those favored by AIC [@neathBayesianInformationCriterion2012]. Conversely, the AIC favours more complex models in large sample setting. Information criteria only provide information about the relative quality between models using the same likelihood function and data set [@chowdhuryVariableSelectionStrategies2020].
+
+Several internal performance measures are available for an estimate of out-of-sample model performance. The AUROC analysis is developed for predictive model selection [@pepeInterpretationROCCurve2000] and is widely adopted in clinical science to assess the model sensitivity and specificity trade-off [@collinsTransparentReportingMultivariable2015]. Bootstrapping is a preferred technique for assessing prediction models using performance measures such as AUROC [@harrellRegressionModelingStrategies2015] [@steyerbergInternalExternalValidation2003], since using the cases from the original analysis sample results in an overly optimistic performance estimate [@ledellComputationallyEfficientConfidence2015]. The AUROC is also criticized for being a semi-proper scoring rule [@zhouRelationshipIncrementalValues2021], which means that the best performance can be attained by a misspecified model.
+
+Concluding, ICs and internal performance measures intend to approximate the data generating model and have the best out-of-sample performance, aiming for the highest predictive power in the total population. We are interested in their ability to choose the correct model when the data generating mechanism is known. Testing the IC success rate and performance measures (AUROC and $R^2$) for choosing the correct model in different simulation contexts, such as sample size and data quality, may yield information for future prediction modelling choices. The according research question will be: How successful are Information Criteria and internal performance measures in choosing the correct prediction model in different simulated contexts? We expect a difference in these factors and a specific use and integration of the techniques in real life application. We will follow a mini-thesis structure that only look at one simple data generating mechanism. The results of this study will be used to inform the design of the thesis.
+
+# Methods {#sec3}
+In this study, we focus on prediction models designed for dichotomous risk prediction, such as disease occurence. To investigate the succes rate of IC and internal performance measures, we simulated two population data sets and sampled from this dataset. The simulations, analyses and visualizations were performed in R-studio [@rcoreteamLanguageEnvironmentStatistical2023b] and are available on [Github](https://github.com/hiddevandebeek/Thesis) .
+
+## Data generating mechanism
+We generated two population data sets, each with a different data generating mechanism. We simulated 10,000,000 individuals per model, each characterized by three covariates (X1, X2, and X3). The covariates of the two models were independently derived from the same standard normal distributions. The mean vector ($\mu$) and the covariance matrix ($\Sigma$) for these distributions were defined as follows:\
+\
+\begin{equation*}
+\pmb{\mu} = \begin{bmatrix}
+ 0 \\ 0 \\ 0
+\end{bmatrix}, \pmb{\Sigma} = \begin{bmatrix}
+1   & 0.2 & 0.2 \\
+0.2 & 1   & 0.2 \\
+0.2 & 0.2 & 1   \\
+\end{bmatrix}
+\end{equation*}\
+\
+The probability of each individual belonging to the outcome group was determined based on their covariate values. This was done using a logistic regression model, which defined the probability of the outcome $Y = 1$ as a function of the covariates:\
+\begin{align}
+&\mathrm{Model \ \  1:} P(Y=1|X_1,X_2) = \frac{1}{1+e^{-(\beta_0+\beta_1X_1+\beta_2X_2)}} \\
+&\mathrm{Model \ \  2:} P(Y=1|X_1,X_2,X_3) = \frac{1}{1+e^{-(\beta_0+\beta_1X_1+\beta_2X_2+\beta_3X_3)}}
+\end{align}\
+In model 1, the coefficients were set as $\beta_0 = 1.65, \beta_1 = 0.8, \beta_2 = 0.8, \beta_3 = 0$. In model 2, the coefficients were set as $\beta_0 = 2, \beta_1 = 0.8, \beta_2 = 0.8, \beta_3 = 0.4$. The outcome for each individual was then generated following a Bernoulli distribution. 
+
+## Analysis
+In this study, we analyzed the success rate by comparing the true model to a competing model. The true model was defined as the model that generated the data: $(Y=1|X_1, X_2)$ or $(Y=1|X_1, X_2, X3)$. The competing model is defined by the opposing model: $(Y=1|X_1, X_2, X3)$ or $(Y=1|X_1, X_2)$, respectively. The competing model is therefore misspecified and can thus be used to investigate the ability of the ICs and internal performance measures to choose the correct model. We are effectively analyzing the ability to correctly add or remove covariates from the model. The success rate was quantified as the proportion of instances where the true model was correctly chosen as the best performing model.
+
+For our internal performance evaluation, we specifically used the AUC, calculated by fitting the model using  `lrm` function of the rms package. To correct for the optimism in the apparent AUC in the sample, we bootstrap the sample and calculate the optimism-corrected AUC. The optimism-corrected AUC is calculated by subtracting the average bootstrapped optimism from the apparent AUC. The optimism is calculated by taking the difference between the AUC in the bootstrap sample and the AUC in the test sample [@steyerbergInternalValidationPredictive2001]. This is done by the `validate` function in the rms package. For this purpose, a bootstrap with 80 resamples was performed in each iteration. The `lrm` function also provides the BIC and AIC of the fitted model.
+
+This analysis procedure was repeated for three different event rates (5\%, 20\%, and 50\%). Per event rate, we calculated the success rate for two different ICs and internal performance techniques for a sample size ranging from 50 to 1,000 with intervals of 50. Per sample size, 3,500 iterations were performed. The success rate was calculated for each combination of event rate and sample size. The nonconvergence of the model fit was also recorded. Visualizations are generated using the package ggplot2 [@wickhamGettingStartedGgplot22016]. 
+
+
+# Results {#sec4}
+## Model 1: $(Y=1|X_1, X_2)$
+The result of the analysis is shown in figure \ref{fig:figure-1}. It can be seen that BIC has the highest overall success rate in all three scenario's. After that AIC has the highest success rate, followed by the optimism corrected AUC. The AUC has the lowest success rate in all three scenario's. There is no trend for sample size, with a fairly constant success rate across all three scenario's.
+
+```{=tex}
+\begin{figure}[h]
+\centering
+\captionsetup[subfigure]{oneside,margin={.45cm,0cm}}
+\begin{subfigure}{0.29\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 2/plot.05.png"}
+    \caption{5\% disease occurence.}
+    \label{fig:sub-1-figure-1}
+\end{subfigure}
+\hspace{-0.1cm}
+\captionsetup[subfigure]{oneside,margin={.55cm,0cm}}
+\begin{subfigure}{0.29\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 2/plot.20.png"}
+    \caption{20\% disease occurence.}
+    \label{fig:sub-2-figure-1}
+\end{subfigure}
+\hspace{-0.1cm}
+\captionsetup[subfigure]{oneside,margin={-1.5cm,0cm}}
+\begin{subfigure}{0.408\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 2/plot.50.png"}
+    \caption{50\% disease occurence.}
+    \label{fig:sub-3-figure-1}
+\end{subfigure}
+        
+\caption{Success rate of ICs and internal performance measures in choosing the correct model.}
+\label{fig:figure-1}
+\end{figure}
+```
+
+## Model 2: $(Y=1|X_1, X_2, X3)$
+The result of the analysis is shown in figure \ref{fig:figure-2}. It can be seen that AUC has the highest overall success rate in all three scenario's. The performance of bootstrapped AUC and AIC is comparable across context. BIC has the lowest overall success rate in all three scenario's, performing worse in the low event rate scenario. There is clear trend for sample size, with a higher success rate for larger sample sizes: a convergence to the data generating model. 
+
+```{=tex}
+\begin{figure}[h]
+\centering
+\captionsetup[subfigure]{oneside,margin={.45cm,0cm}}
+\begin{subfigure}[b]{0.29\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 1/plot.05.png"}
+    \caption{5\% disease occurence.}
+    \label{fig:sub-1-figure-2}
+\end{subfigure}
+\hspace{-0.1cm}
+\captionsetup[subfigure]{oneside,margin={.55cm,0cm}}
+\begin{subfigure}[b]{0.29\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 1/plot.20.png"}
+    \caption{20\% disease occurence.}
+    \label{fig:sub-2-figure-2}
+\end{subfigure}
+\hspace{-0.1cm}
+\captionsetup[subfigure]{oneside,margin={-1.5cm,0cm}}
+\begin{subfigure}[b]{0.408\textwidth}
+    \includegraphics[width=\textwidth]{"experiment 1/plot.50.png"}
+    \caption{50\% disease occurrence.}
+    \label{fig:sub-3-figure-2}
+\end{subfigure}
+        
+\caption{Success rate of ICs and internal performance measures in choosing the correct model.}
+\label{fig:figure-2}
+\end{figure}
+```
+
+
+
+
+# Discussion {#sec5}
+
+This is a generic template designed for use by multiple journals
+
+# Conclusions {#sec6}
+
+This is a generic template designed for use by multiple journals

@@ -1,0 +1,140 @@
+---
+title: "Visualization Report"
+author: "Hidde van de Beek"
+date: "2023-11-20"
+output: html_document
+---
+
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+```
+
+## Libraries
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(caTools)
+library(plotly)
+library(MASS)
+library(matlib)
+library(pROC)
+library(parallel)
+library(CalibrationCurves)
+library(caret)
+library(tidyverse)
+library(rms)
+source("R/functions.R")
+```
+
+```{r}
+iterations <- 3500
+bootstrap <- 80
+```
+
+## Experiment 1: 3 predictors and full covariance
+#### Run
+```{r, message=FALSE, warning=FALSE, cache=T}
+data1 <- readRDS("data/simulation/data experiment 1.rds")
+
+results_list.05.1 <- list()
+results_list.20.1 <- list()
+results_list.50.1 <- list()
+
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.05.1[[paste("compare.05", size, sep = ".")]] <- compare_models_parallel(data1, iterations, size, 0.05, bootstrap, "y ~ predictor1 + predictor2 + predictor3", "y ~ predictor1 + predictor2")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.20.1[[paste("compare.20", size, sep = ".")]] <- compare_models_parallel(data1, iterations, size, 0.2, bootstrap, "y ~ predictor1 + predictor2 + predictor3", "y ~ predictor1 + predictor2")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.50.1[[paste("compare.50", size, sep = ".")]] <- compare_models_parallel(data1, iterations, size, 0.5, bootstrap, "y ~ predictor1 + predictor2 + predictor3", "y ~ predictor1 + predictor2")
+})
+Sys.time()
+
+saveRDS(results_list.50.1, "data/analysis/experiment 1/data_sim50.rds")
+saveRDS(results_list.20.1, "data/analysis/experiment 1/data_sim20.rds")
+saveRDS(results_list.05.1, "data/analysis/experiment 1/data_sim05.rds")
+```
+## Experiment 2: 2 predictors and full covariance
+#### Run
+```{r, message=FALSE, warning=FALSE, cache=T}
+data2 <- readRDS("data/simulation/data experiment 2.rds")
+
+results_list.05.2 <- list()
+results_list.20.2 <- list()
+results_list.50.2 <- list()
+
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.05.2[[paste("compare.05", size, sep = ".")]] <- compare_models_parallel(data2, iterations, size, 0.05, bootstrap, "y ~ predictor1 + predictor2", "y ~ predictor1 + predictor2 + predictor3")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.20.2[[paste("compare.20", size, sep = ".")]] <- compare_models_parallel(data2, iterations, size, 0.2, bootstrap, "y ~ predictor1 + predictor2", "y ~ predictor1 + predictor2 + predictor3")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.50.2[[paste("compare.50", size, sep = ".")]] <- compare_models_parallel(data2, iterations, size, 0.5, bootstrap, "y ~ predictor1 + predictor2", "y ~ predictor1 + predictor2 + predictor3")
+})
+Sys.time()
+
+saveRDS(results_list.50.2, "data/analysis/experiment 2/data_sim50.rds")
+saveRDS(results_list.20.2, "data/analysis/experiment 2/data_sim20.rds")
+saveRDS(results_list.05.2, "data/analysis/experiment 2/data_sim05.rds")
+```
+## Experiment 3: 3 predictors and partial covariance
+#### Run
+```{r, message=FALSE, warning=FALSE, cache=T}
+data3 <- readRDS("data/simulation/data experiment 3.rds")
+
+results_list.05.3 <- list()
+results_list.20.3 <- list()
+results_list.50.3 <- list()
+
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.05.3[[paste("compare.05", size, sep = ".")]] <- compare_models_parallel(data3, iterations, size, 0.05, bootstrap, "y ~ predictor1 + predictor2 + predictor3", "y ~ predictor1 + predictor2")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.20.3[[paste("compare.20", size, sep = ".")]] <- compare_models_parallel(data3, iterations, size, 0.2, bootstrap, "y ~ predictor1 + predictor2 + predictor3", "y ~ predictor1 + predictor2")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.50.3[[paste("compare.50", size, sep = ".")]] <- compare_models_parallel(data3, iterations, size, 0.5, bootstrap, "y ~ predictor1 + predictor2 + predictor3", "y ~ predictor1 + predictor2")
+})
+Sys.time()
+
+saveRDS(results_list.50.3, "data/analysis/experiment 3/data_sim50.rds")
+saveRDS(results_list.20.3, "data/analysis/experiment 3/data_sim20.rds")
+saveRDS(results_list.05.3, "data/analysis/experiment 3/data_sim05.rds")
+```
+## Experiment 4: 2 predictors and partial covariance
+#### Run
+```{r, message=FALSE, warning=FALSE, cache=T}
+data4 <- readRDS("data/simulation/data experiment 4.rds")
+
+results_list.05.4 <- list()
+results_list.20.4 <- list()
+results_list.50.4 <- list()
+
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.05.4[[paste("compare.05", size, sep = ".")]] <- compare_models_parallel(data4, iterations, size, 0.05, bootstrap, "y ~ predictor1 + predictor2", "y ~ predictor1 + predictor2 + predictor3")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.20.4[[paste("compare.20", size, sep = ".")]] <- compare_models_parallel(data4, iterations, size, 0.2, bootstrap, "y ~ predictor1 + predictor2", "y ~ predictor1 + predictor2 + predictor3")
+})
+Sys.time()
+system.time(for (size in seq(50, 1000, by = 50)) {
+  results_list.50.4[[paste("compare.50", size, sep = ".")]] <- compare_models_parallel(data4, iterations, size, 0.5, bootstrap, "y ~ predictor1 + predictor2", "y ~ predictor1 + predictor2 + predictor3")
+})
+Sys.time()
+
+saveRDS(results_list.50.4, "data/analysis/experiment 4/data_sim50.rds")
+saveRDS(results_list.20.4, "data/analysis/experiment 4/data_sim20.rds")
+saveRDS(results_list.05.4, "data/analysis/experiment 4/data_sim05.rds")
+```

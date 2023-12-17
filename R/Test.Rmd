@@ -1,0 +1,82 @@
+---
+title: "test"
+author: "Hidde van de Beek"
+date: "2023-12-07"
+output: html_document
+---
+
+```{r}
+compare_models <- function(data, n_iter, samplesize, perc_ones) {
+  library(dplyr)
+  library(pROC)
+
+  model1_aic_count <- 0
+  model1_bic_count <- 0
+  model1_auc_count <- 0
+
+  for (i in 1:n_iter) {
+    # Sample the data using sample_data function
+    sampled_data <- sample_data(data, samplesize, perc_ones)
+    sampled_data$y <- factor(sampled_data$y, levels = c(0, 1))
+
+    # Fit Model 1 and Model 2
+    model1_formula <- y ~ predictor1 + predictor2 + predictor3
+    model2_formula <- y ~ predictor1 + predictor2
+
+    model1 <- lrm(model1_formula, data=sampled_data, x=T, y=T)
+    model2 <- lrm(model2_formula, data=sampled_data, x=T, y=T)
+
+    # Compare AIC and BIC
+    model1_aic_count <- model1_aic_count + (AIC(model1) < AIC(model2))
+    model1_bic_count <- model1_bic_count + (BIC(model1) < BIC(model2))
+    model1_auc_count <- model1_auc_count + (model1$stats[6] > model2$stats[6])
+  }
+
+  # Calculate percentages
+  calculate_percentage <- function(count) (count / n_iter) * 100
+  model1_aic_percent <- calculate_percentage(model1_aic_count)
+  model1_bic_percent <- calculate_percentage(model1_bic_count)
+  model1_auc_percent <- calculate_percentage(model1_auc_count)
+
+  # Create and return a table of the results
+  results_table <- data.frame(
+    Model = c("Model 1", "Model 2"),
+    AIC_Percentage = c(model1_aic_percent, 100 - model1_aic_percent),
+    BIC_Percentage = c(model1_bic_percent, 100 - model1_bic_percent),
+    AUC_Percentage = c(model1_auc_percent, 100 - model1_auc_percent)
+  )
+  return(results_table)
+}
+```
+
+
+```{r}
+# Usage example
+result <- compare_models(data_experiment2, 3000, 50, 0.5)
+print(result)
+
+result <- compare_models(data_experiment2, 3000, 200, 0.5)
+print(result)
+
+result <- compare_models(data_experiment2, 3000, 500, 0.5)
+print(result)
+
+result <- compare_models(data_experiment2, 3000, 1000, 0.5)
+print(result)
+```
+
+```{r}
+# Usage example
+result <- compare_models(data_experiment4, 3000, 50, 0.5)
+print(result)
+
+result <- compare_models(data_experiment4, 3000, 200, 0.5)
+print(result)
+
+result <- compare_models(data_experiment4, 3000, 500, 0.5)
+print(result)
+
+result <- compare_models(data_experiment4, 3000, 1000, 0.5)
+print(result)
+```
+

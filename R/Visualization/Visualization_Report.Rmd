@@ -5,6 +5,10 @@ date: "2023-11-29"
 output: html_document
 ---
 
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+```
+
 # Visualization
 ## libraries
 ```{r, message=FALSE, warning=FALSE}
@@ -17,58 +21,47 @@ library(pROC)
 library(parallel)
 library(CalibrationCurves)
 library(caret)
-library(wesanderson)
 library(tidyverse)
 library(patchwork)
+library(papaja)
+library(cowplot)
+source("R/Functions.R")
 ```
-
-## load data
-```{r}
-results_list.50 <- readRDS("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_sim50.rds")
-results_list.20 <- readRDS("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_sim20.rds")
-results_list.05 <- readRDS("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/data/data_sim05.rds")
-```
-
-
 
 ## plotting 
-### function
-```{r}
-create_plot <- function(results_list) {
-  # Combine all results into a single data frame
-  combined_results <- bind_rows(results_list, .id = "Sample_Size")
-
-  # Convert from wide to long format
-  combined_results_long <- combined_results %>%
-    mutate(Sample_Size = as.numeric(gsub("compare.*\\.", "", Sample_Size))) %>%
-    pivot_longer(cols = c("AIC_Percentage", "BIC_Percentage", "AUC_Percentage", "AUCValidated_Percentage"), names_to = "Criterion", values_to = "Percentage") %>%
-    filter(Model == "Model 1") %>%
-    mutate(Criterion = factor(Criterion, levels = c("AIC_Percentage", "BIC_Percentage", "AUC_Percentage", "AUCValidated_Percentage"), labels = c("AIC", "BIC", "AUC", "AUC with optimism correction")))
-
-  # Create a minimalistic plot
-plot_minimalistic <- ggplot(combined_results_long, aes(x = Sample_Size, y = Percentage, color = Criterion)) +
-  geom_line() +  # Default line width
-  theme_minimal(base_size = 12) +  # Clean, minimalistic theme with moderate base font size
-  theme(legend.position = "bottom",  
-        legend.title = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 14),  # Moderately sized title
-        axis.text = element_text(color = "black", size = 12),  # Readable axis text
-        axis.title = element_text(size = 12),  # Consistent axis title size
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank()) +
-  labs(x = "Sample Size",
-       y = "Percentage (%)") +
-  scale_y_continuous(limits = c(0, 100)) +
-  scale_x_continuous(limits = c(0, 1000))
-
-  return(plot_minimalistic)
-}
-```
-
 ### all datasets
 ```{r}
-plot.05 <- create_plot(results_list.05)
-plot.20 <- create_plot(results_list.20)
+## load data
+results_list.50 <- readRDS("data/analysis/experiment 1/data_sim50.rds")
+results_list.20 <- readRDS("data/analysis/experiment 1/data_sim20.rds")
+results_list.05 <- readRDS("data/analysis/experiment 1/data_sim05.rds")
+
+plot.05 <- create_plot(results_list.05) + theme(legend.position = "none")
+plot.20 <- create_plot(results_list.20) + theme(legend.position = "none")
+plot.50 <- create_plot(results_list.50)
+
+plot.05
+plot.20
+plot.50
+
+```
+
+
+```{r}
+### saving
+ggsave("results/experiment 1/plot.05.png", plot.05, width = 6.7, height = 6.5, dpi = 600)
+ggsave("results/experiment 1/plot.20.png", plot.20, width = 6.7, height = 6.5, dpi = 600)
+ggsave("results/experiment 1/plot.50.png", plot.50, width = 9.4, height = 6.5, dpi = 600)
+```
+
+```{r}
+## load data
+results_list.50 <- readRDS("data/analysis/experiment 2/data_sim50.rds")
+results_list.20 <- readRDS("data/analysis/experiment 2/data_sim20.rds")
+results_list.05 <- readRDS("data/analysis/experiment 2/data_sim05.rds")
+
+plot.05 <- create_plot(results_list.05) + theme(legend.position = "none")
+plot.20 <- create_plot(results_list.20) + theme(legend.position = "none")
 plot.50 <- create_plot(results_list.50)
 
 plot.05
@@ -76,14 +69,13 @@ plot.20
 plot.50
 ```
 
-### saving
+
 ```{r}
-ggsave("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/results/experiment 1/plot.05.png", plot.05, dpi = 600)
-ggsave("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/results/experiment 1/plot.20.png", plot.20, dpi = 600)
-ggsave("/Users/hiddevandebeek/Documents/Documents - Hidde’s MacBook Pro/Github/Thesis/results/experiment 1/plot.50.png", plot.50, dpi = 600)
+### saving
+ggsave("results/experiment 2/plot.05.png", plot.05, width = 6.7, height = 6.5, dpi = 600)
+ggsave("results/experiment 2/plot.20.png", plot.20, width = 6.7, height = 6.5, dpi = 600)
+ggsave("results/experiment 2/plot.50.png", plot.50, width = 9.4, height = 6.5, dpi = 600)
 ```
-
-
 
 
 
