@@ -1,6 +1,6 @@
 # Information Criteria vs Internal performance measures:
 This repository forms the heart of my Master Thesis <br>
-[`Decoding Predictive Performance: A Simulation Study on Information Criteria vs. Internal Performance Measures`](./docs/Thesis Manuscript/Thesis-Manuscript.pdf). 
+[`Decoding Predictive Performance: A Simulation Study on Information Criteria vs. Internal Performance Measures`](./docs/Thesis%20Manuscript/Thesis-Manuscript.pdf). 
 
 In this project, we investigated the performance of Information Criteria and internal performance measures in different simulated contexts. Here in this repository, you will find all code used in our project and full instructions for how to replicate this simulation study.
 
