@@ -1,4 +1,4 @@
-# Information Criteria vs Internal performance measures:
+# Information Criteria vs Internal performance measures
 This repository forms the heart of my Master Thesis <br>
 [`Decoding Predictive Performance: A Simulation Study on Information Criteria vs. Internal Performance Measures`](./docs/Thesis_Manuscript/Thesis-Manuscript.pdf). 
 
