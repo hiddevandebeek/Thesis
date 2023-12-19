@@ -10,7 +10,7 @@ Email: h.vandebeek@uu.nl
 
 | File / Folder                              | Contents                                                         |
 | :----------------------------------------- | :--------------------------------------------------------------- |
-| [`LICENSE`](./LICENSE)                     | The contents of this repository are made publicly available unter a `GNU General Public License v3.0`. <br> Please see this document for details.|
+| [`LICENSE`](./LICENSE)                     | The contents of this repository are made publicly available unter a `GNU General Public License v3.0`. Please see this document for details.|
 | [`simulation code`](./R/Data_simulation/Simulation_Report_Covariance.Rmd) | This is the code that simulated the populations using two different data generating mechanisms.
 | [`experiment code`](./R/Experiments/Analysis_Report_Experiment.Rmd) | This is the code that used the populations to do the experiments. |
 | [`visualization code`](./R/Visualization/Visualization_Report.Rmd) | This is the code that produces the visualization of the experiments. |
