@@ -30,12 +30,13 @@ source("R/Functions.R")
 ```{r}
 # Set random seed for reproducibility
 set.seed(28)
-p      <- 0                             # proportion of correlated predictors
-npred  <- 3                             # number of predictors
-z      <- 0.2                           # z 
-n      <- 1000000                       # Number of samples in the dataset
-a <- 4                                  # the effect size
+p      <- 1                               # proportion of correlated predictors
+npred  <- 3                               # number of predictors
+z      <- 0.2                             # z 
+n      <- 1000000                         # Number of samples in the dataset
+a <- 4                                    # the effect size
 ```
+
 
 ## Simulate data
 Simulate data for diseased class and non-diseased class using a covariance matrix and mean vector using the MASS package. The covariance matrix is chosen such that the two predictors are correlated. The mean vector is chosen such that the diseased class has a higher mean than the non-diseased class for both predictors. The data is then combined into a single dataset.
@@ -50,48 +51,48 @@ sigma0 <- scenario()         # class 0
 Experiment 1
 ```{r, cache=T}
 # Generate data
-data_experiment3 <- mvrnorm(n, mu = mu0, Sigma = sigma0) %>%
+data_experiment1 <- mvrnorm(n, mu = mu0, Sigma = sigma0) %>%
   as.data.frame()
 
 # Rename columns to "predictor1", "predictor2" ,...
-colnames(data_experiment3) <- c(paste0("predictor", 1:(ncol(data_experiment3))))
+colnames(data_experiment1) <- c(paste0("predictor", 1:(ncol(data_experiment1))))
 
 # Simulate binary y to have Prob(y=1) = 1/[1+exp(-L)]
-L1 <-  0.2*a*data_experiment3$predictor1 + 0.2*a*data_experiment3$predictor2 + 0.1*a*data_experiment3$predictor3
+L1 <-  0.2*a*data_experiment1$predictor1 + 0.2*a*data_experiment1$predictor2 + 0.1*a*data_experiment1$predictor3
 mean(L1)
-L1 <- - mean(L1) + 0.2*a*data_experiment3$predictor1 + 0.2*a*data_experiment3$predictor2 + 0.1*a*data_experiment3$predictor3 # 50/50 split
+L1 <- - mean(L1) + 0.2*a*data_experiment1$predictor1 + 0.2*a*data_experiment1$predictor2 + 0.1*a*data_experiment1$predictor3 # 50/50 split
 
 y <- ifelse(runif(n) < plogis(L1), 1, 0)
-data_experiment3 <- cbind(data_experiment3, y)
+data_experiment1 <- cbind(data_experiment1, y)
 
 #proportion y's in data
-prop.table(table(data_experiment3$y))
+prop.table(table(data_experiment1$y))
 ```
 
 Experiment 2
 ```{r, cache=T}
 # Generate data
-data_experiment4 <- mvrnorm(n, mu = mu0, Sigma = sigma0) %>%
+data_experiment2 <- mvrnorm(n, mu = mu0, Sigma = sigma0) %>%
   as.data.frame()
 
 # Rename columns to "predictor1", "predictor2" ,...
-colnames(data_experiment4) <- c(paste0("predictor", 1:(ncol(data_experiment4))))
+colnames(data_experiment2) <- c(paste0("predictor", 1:(ncol(data_experiment2))))
 
 # Simulate binary y to have Prob(y=1) = 1/[1+exp(-L)] 0.2255
-L2 <-  0.2*a*data_experiment4$predictor1 + 0.2*a*data_experiment4$predictor2
+L2 <-  0.2*a*data_experiment2$predictor1 + 0.2*a*data_experiment2$predictor2
 mean(L2)
-L2 <- - mean(L2) + 0.2*a*data_experiment4$predictor1 + 0.2*a*data_experiment4$predictor2 # 50/50 split
+L2 <- - mean(L2) + 0.2*a*data_experiment2$predictor1 + 0.2*a*data_experiment2$predictor2 # 50/50 split
 
 y <- ifelse(runif(n) < plogis(L2), 1, 0)
-data_experiment4 <- cbind(data_experiment4, y)
+data_experiment2 <- cbind(data_experiment2, y)
 
 #proportion y's in data
-prop.table(table(data_experiment4$y))
+prop.table(table(data_experiment2$y))
 ```
 # Save Data in RDS Format in data folder
 ```{r}
-saveRDS(data_experiment3, "data/simulation/data experiment 3.rds")
-saveRDS(data_experiment4, "data/simulation/data experiment 4.rds")
+saveRDS(data_experiment1, "data/simulation/data_experiment1.rds")
+saveRDS(data_experiment2, "data/simulation/data_experiment2.rds")
 ```
 
 
@@ -99,17 +100,17 @@ saveRDS(data_experiment4, "data/simulation/data experiment 4.rds")
 ### 2D Histograms
 ```{r, cache=TRUE}
 # Plot for Predictor 1
-ggplot(data_experiment3, aes(x = predictor1, fill = as.factor(y))) +
+ggplot(data_experiment1, aes(x = predictor1, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 200) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 1")
 
 # Plot for Predictor 2
-ggplot(data_experiment3, aes(x = predictor2, fill = as.factor(y))) +
+ggplot(data_experiment1, aes(x = predictor2, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 200) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 2")
 
 # Plot for Predictor 3
-ggplot(data_experiment3, aes(x = predictor3, fill = as.factor(y))) +
+ggplot(data_experiment1, aes(x = predictor3, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 200) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 3")
 ```
@@ -117,37 +118,65 @@ ggplot(data_experiment3, aes(x = predictor3, fill = as.factor(y))) +
 ### 2D Histograms
 ```{r, cache=TRUE}
 # Plot for Predictor 1
-ggplot(data_experiment4, aes(x = predictor1, fill = as.factor(y))) +
+ggplot(data_experiment2, aes(x = predictor1, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 200) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 1")
 
 # Plot for Predictor 2
-ggplot(data_experiment4, aes(x = predictor2, fill = as.factor(y))) +
+ggplot(data_experiment2, aes(x = predictor2, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 200) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 2")
 
 # Plot for Predictor 3
-ggplot(data_experiment4, aes(x = predictor3, fill = as.factor(y))) +
+ggplot(data_experiment2, aes(x = predictor3, fill = as.factor(y))) +
   geom_histogram(alpha = 0.5, position = 'identity', bins = 200) +
   ggtitle("Distribution of Diseased and Non-Diseased Classes for Predictor 3")
 ```
 
-### Test models
-Model 3
-```{r, cache=TRUE}
-model3 <- glm(y ~ ., data = data_experiment3, family = binomial)
-summary(model3)
-predictions3 <- predict(model3, newdata = data_experiment3, type = "response")
+### 3D Histogram of Predictor 1 and Predictor 2
+```{r, warning=FALSE, cache=TRUE}
+# Calculate densities for class 1 and class 0
+density1 <- with(data_experiment1[data_experiment1$y == 1, ], kde2d(predictor1, predictor2, n = 30))
+density0 <- with(data_experiment1[data_experiment1$y == 0, ], kde2d(predictor1, predictor2, n = 30))
 
-# Assuming 'colAUC' is available or replaced with an equivalent function
-colAUC(predictions3, data_experiment3$y, plotROC = F)
+# Create the interactive 3D plot
+p1 <- plot_ly(z = ~density1$z) %>% 
+  add_surface(
+    x = ~density1$x,
+    y = ~density1$y,
+    colorscale = list(c(0, "red"), list(1, "pink")),
+    opacity = 0.8
+  )
+
+p2 <- plot_ly(z = ~density0$z) %>% 
+  add_surface(
+    x = ~density0$x,
+    y = ~density0$y,
+    colorscale = list(c(0, "blue"), list(1, "lightblue")),
+    opacity = 0.8
+  )
+
+plot <- plotly::subplot(p1, p2, nrows = 1, shareX = TRUE, shareY = TRUE)
+plot
 ```
-Model 4
+
+
+
+Model 1
 ```{r, cache=TRUE}
-model4 <- glm(y ~ ., data = data_experiment4, family = binomial)
-summary(model4)
-predictions4 <- predict(model4, newdata = data_experiment4, type = "response")
+model1 <- glm(y ~ ., data = data_experiment1, family = binomial)
+summary(model1)
+predictions1 <- predict(model1, newdata = data_experiment1, type = "response")
 
 # Assuming 'colAUC' is available or replaced with an equivalent function
-colAUC(predictions4, data_experiment4$y, plotROC = F)
+colAUC(predictions1, data_experiment1$y, plotROC = F)
+```
+Model 2
+```{r, cache=TRUE}
+model2 <- glm(y ~ ., data = data_experiment2, family = binomial)
+summary(model2)
+predictions2 <- predict(model2, newdata = data_experiment2, type = "response")
+
+# Assuming 'colAUC' is available or replaced with an equivalent function
+colAUC(predictions2, data_experiment2$y, plotROC = F)
 ```
