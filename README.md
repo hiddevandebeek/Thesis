@@ -15,7 +15,7 @@ Email: h.vandebeek@uu.nl
 | [`experiment code`](./R/Experiments/Analysis_Report_Experiment.Rmd) | This is the code that used the populations to do the experiments. |
 | [`visualization code`](./R/Visualization/Visualization_Report.Rmd) | This is the code that produces the visualization of the experiments. |
 | [`results`](./results) | In this folder, you will find the visualizations of the two experiments. |
-| [`functions`](.R/Functions.R) | This R file has all created R functions in the different files of data generation, analysis, and visualization.
+| [`functions`](./R/Functions.R) | This R file has all created R functions in the different files of data generation, analysis, and visualization.
 | [`manuscript`](./docs/Thesis_Manuscript) | In this folder, you will find all necessary files to generate the [`manuscript`](./docs/Thesis_Manuscript/Theses-Manuscript.pdf)|           
 
 
