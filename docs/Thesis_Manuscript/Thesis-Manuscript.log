@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.12.17)  19 DEC 2023 15:51
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.12.17)  21 DEC 2023 13:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1160,14 +1160,14 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `TU/lmss/b/n' in size <9> not available
-(Font)              Font shape `TU/lmss/bx/n' tried instead on input line 64.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 64.
+(Font)              Font shape `TU/lmss/bx/n' tried instead on input line 58.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 58.
 (/Users/hiddevandebeek/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/Users/hiddevandebeek/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 64.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 58.
 (/Users/hiddevandebeek/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/Users/hiddevandebeek/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
@@ -1175,15 +1175,15 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ) (/Users/hiddevandebeek/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
-Overfull \vbox (4.5pt too high) detected at line 64
+Overfull \vbox (4.5pt too high) detected at line 58
  []
 
 
-Overfull \hbox (350.99213pt too wide) in paragraph at lines 64--64
+Overfull \hbox (350.99213pt too wide) in paragraph at lines 58--58
 [][] | || []|[][] 
  []
 
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 64.
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 58.
 
 Overfull \vbox (29.59395pt too high) has occurred while \output is active []
 
@@ -1192,39 +1192,52 @@ Overfull \vbox (29.59395pt too high) has occurred while \output is active []
 \openout3 = `Thesis-Manuscript.pag'.
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 191--196
+Underfull \hbox (badness 10000) in paragraph at lines 183--188
 
  []
+
+
+Underfull \hbox (badness 10000) detected at line 202
+[]
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 [2]
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: TU).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-File: experiment 2/plot.05.png Graphic file (type bmp)
-<experiment 2/plot.05.png>
-File: experiment 2/plot.20.png Graphic file (type bmp)
-<experiment 2/plot.20.png>
-File: experiment 2/plot.50.png Graphic file (type bmp)
-<experiment 2/plot.50.png>
+File: experiment_2/plot.05.png Graphic file (type bmp)
+<experiment_2/plot.05.png>
+File: experiment_2/plot.20.png Graphic file (type bmp)
+<experiment_2/plot.20.png>
+File: experiment_2/plot.50.png Graphic file (type bmp)
+<experiment_2/plot.50.png>
 
-Underfull \hbox (badness 10000) detected at line 290
+Underfull \hbox (badness 10000) detected at line 297
 []
  []
 
-[3]
-File: experiment 1/plot.05.png Graphic file (type bmp)
-<experiment 1/plot.05.png>
-File: experiment 1/plot.20.png Graphic file (type bmp)
-<experiment 1/plot.20.png>
-File: experiment 1/plot.50.png Graphic file (type bmp)
-<experiment 1/plot.50.png>
 
-Underfull \hbox (badness 10000) detected at line 331
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+File: experiment_1/plot.05.png Graphic file (type bmp)
+<experiment_1/plot.05.png>
+File: experiment_1/plot.20.png Graphic file (type bmp)
+<experiment_1/plot.20.png>
+File: experiment_1/plot.50.png Graphic file (type bmp)
+<experiment_1/plot.50.png>
+
+Underfull \hbox (badness 10000) detected at line 337
 []
  []
 
-[4] (./Thesis-Manuscript.bbl
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3] [4] (./Thesis-Manuscript.bbl
 Underfull \hbox (badness 1221) in paragraph at lines 19--21
 []\TU/Stix(0)/m/n/8.5 Akaike H. A New Look at the Statistical Model Identification. \TU/Stix(0)/m/it/8.5 IEEE Transactions on Automatic Control. \TU/Stix(0)/m/n/8.5 1974;19(6):716–723.  []doi:
  []
@@ -1245,10 +1258,10 @@ L3 programming layer <2023-12-11>
 (\end occurred when \iftrue on line 4740 was incomplete)
 (\end occurred when \ifx on line 2 was incomplete) 
 Here is how much of TeX's memory you used:
- 24837 strings out of 476831
- 455328 string characters out of 5803069
- 1950106 words of memory out of 5000000
- 46355 multiletter control sequences out of 15000+600000
+ 24845 strings out of 476831
+ 455490 string characters out of 5803069
+ 1947106 words of memory out of 5000000
+ 46363 multiletter control sequences out of 15000+600000
  567019 words of font info for 111 fonts, out of 8000000 for 9000
  40 hyphenation exceptions out of 8191
  94i,10n,107p,1014b,675s stack positions out of 10000i,1000n,20000p,200000b,200000s
