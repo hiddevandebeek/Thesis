@@ -32,7 +32,6 @@ sample_data <- function(data, size, perc_ones) {
   
   return(sampled_data)
 }
-
 scenario <- function(){
   # set up correlations
   corr0  <-  matrix(0, npred, npred)         # matrix: set up for cov matrix, 0 on diagonals
@@ -42,8 +41,6 @@ scenario <- function(){
   sigma0 <-  diag(npred)  + corr0            # matrix: cov matrix of class 0 
   return(sigma0)
 }
-
-
 compare_models_parallel <- function(data, n_iter, samplesize, perc_ones, B, model1_formula, model2_formula) {
   # Function to be run in each parallel process
   model1_formula <- as.formula(model1_formula)
@@ -140,7 +137,6 @@ compare_models_parallel <- function(data, n_iter, samplesize, perc_ones, B, mode
   )
   return(results_table)
 }
-
 create_plot <- function(results_list) {
   # Combine all results into a single data frame
   combined_results <- bind_rows(results_list, .id = "Sample_Size")
@@ -163,3 +159,279 @@ create_plot <- function(results_list) {
     theme_apa(box = TRUE)
   return(plot_minimalistic)
 }
+
+
+create_visualization <- function(dataframe, scenario, n_iter = c(50,2000)){
+  
+}
+
+calculate_linear_predictor5 <- function(a, data, scenario) {
+  if (scenario == "normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + 0.5*data$predictor5))
+  } else if (scenario == "interaction") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + 0.5*data$predictor1*data$predictor2))
+  } else if (scenario == "2 normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + 0.5*data$predictor4 + 0.5*data$predictor5))
+  } else if (scenario == "1 interaction & 1 normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + 0.5*data$predictor1*data$predictor2 + 0.5*data$predictor4))
+  } else if (scenario == "2 interaction") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + 0.5*data$predictor1*data$predictor2 + 0.5*data$predictor2*data$predictor3))
+  }
+}
+calculate_linear_predictor10 <- function(a, data, scenario) {
+  if (scenario == "normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + 0.5*data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + data$predictor10))
+  } else if (scenario == "interaction") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + 0.5*data$predictor1*data$predictor2))
+  } else if (scenario == "2 normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + 0.5*data$predictor4 + 0.5*data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + data$predictor10))
+  } else if (scenario == "1 interaction & 1 normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + 0.5*data$predictor4 + data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + 0.5*data$predictor1*data$predictor2 + data$predictor9))
+  } else if (scenario == "2 interaction") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + 0.5*data$predictor1*data$predictor2 + 0.5*data$predictor2*data$predictor3))
+  }
+}
+calculate_linear_predictor20 <- function(a, data, scenario) {
+  if (scenario == "normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + 0.5*data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + data$predictor10 + data$predictor11 + data$predictor12 + data$predictor13 + data$predictor14 + data$predictor15 + data$predictor16 + data$predictor17 + data$predictor18 + data$predictor19 + data$predictor20))
+  } else if (scenario == "interaction") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + data$predictor10 + data$predictor11 + data$predictor12 + data$predictor13 + data$predictor14 + data$predictor15 + data$predictor16 + data$predictor17 + data$predictor18 + data$predictor19 + 0.5*data$predictor1*data$predictor2))
+  } else if (scenario == "2 normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + 0.5*data$predictor4 + 0.5*data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + data$predictor10 + data$predictor11 + data$predictor12 + data$predictor13 + data$predictor14 + data$predictor15 + data$predictor16 + data$predictor17 + data$predictor18 + data$predictor19 + data$predictor20))
+  } else if (scenario == "1 interaction & 1 normal") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + 0.5*data$predictor4 + data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + data$predictor10 + data$predictor11 + data$predictor12 + data$predictor13 + data$predictor14 + data$predictor15 + data$predictor16 + data$predictor17 + data$predictor18 + 0.5*data$predictor1*data$predictor2 + data$predictor19))
+  } else if (scenario == "2 interaction") {
+    return(a * (data$predictor1 + data$predictor2 + data$predictor3 + data$predictor4 + data$predictor5 + data$predictor6 + data$predictor7 + data$predictor8 + data$predictor9 + data$predictor10 + data$predictor11 + data$predictor12 + data$predictor13 + data$predictor14 + data$predictor15 + data$predictor16 + data$predictor17 + data$predictor18 + 0.5*data$predictor1*data$predictor2 + 0.5*data$predictor2*data$predictor3)) 
+  }
+}
+
+calculate_and_plot_auc5 <- function(plot_title) {
+  scenario <- tolower(unlist(strsplit(plot_title, ":"))[2])
+  scenario <- gsub("^[[:space:]]+", "", scenario) # Remove leading spaces
+  
+  # Parallel setup
+  no_cores <- detectCores() - 1  # Leave one core free for system processes
+  cl <- makeCluster(no_cores)
+  clusterExport(cl, c("calculate_linear_predictor5", "data_experiment", "n", "plogis", "glm", "predict", "colAUC", "binomial"))
+  clusterEvalQ(cl, library(pROC))
+  
+  # Splitting a_values for parallel computation
+  a_values_split <- split(a_values, cut(a_values, no_cores))
+  
+  # Parallel computation
+  auc_results <- parLapply(cl, a_values_split, function(a_chunk) {
+    auc_chunk <- numeric(length(a_chunk))
+    for (i in seq_along(a_chunk)) {
+      a <- a_chunk[i]
+      
+      # Calculate L based on the DGM (data generating mechanism)
+      L <- calculate_linear_predictor5(a, data_experiment, scenario)
+      L <- -mean(L) + L
+      
+      # Generate data based on the DGM
+      y <- ifelse(runif(n) < plogis(L), 1, 0)
+      
+      data_experiment$y <- y
+      
+      model_normal <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5"
+      model_interaction <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor1:predictor2"
+      model_2interaction <- "y ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3"
+      
+      # Fit a logistic regression model with the correct DGM
+      if (scenario == "normal") {
+        model <- glm(model_normal, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "interaction") {
+        model <- glm(model_interaction, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "2 normal") {
+        model <- glm(model_normal, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "1 interaction & 1 normal") {
+        model <- glm(model_interaction, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "2 interaction") {
+        model <- glm(model_2interaction, data = data_experiment, family = binomial(link = "logit"))
+      }
+      
+      predictions <- predict(model, newdata = data_experiment, type = "response")
+      auc_chunk[i] <- colAUC(predictions, data_experiment$y, plotROC = F)
+    }
+    return(auc_chunk)
+  })
+  
+  stopCluster(cl)
+  
+  # Combine results
+  auc_values <- unlist(auc_results)
+  
+  # Sort auc_values and a_values
+  sorted_data <- data.frame(a = a_values, auc = auc_values)
+  sorted_data <- sorted_data[order(sorted_data$auc), ]
+  
+  # Find "a" values corresponding to AUC thresholds
+  a_0.6 <- sorted_data$a[which.max(sorted_data$auc >= 0.6)]
+  a_0.75 <- sorted_data$a[which.max(sorted_data$auc >= 0.75)]
+  a_0.9 <- sorted_data$a[which.max(sorted_data$auc >= 0.9)]
+  
+  # Create a table with the desired "a" values
+  result_table <- data.frame(
+    AUC = c(0.6, 0.75, 0.9),
+    Coefficient = c(a_0.6, a_0.75, a_0.9)
+  )
+  
+  return(list(values = result_table))
+}
+calculate_and_plot_auc10 <- function(plot_title) {
+  scenario <- tolower(unlist(strsplit(plot_title, ":"))[2])
+  scenario <- gsub("^[[:space:]]+", "", scenario) # Remove leading spaces
+  
+  # Parallel setup
+  no_cores <- detectCores() - 1  # Leave one core free for system processes
+  cl <- makeCluster(no_cores)
+  clusterExport(cl, c("calculate_linear_predictor10", "data_experiment", "n", "plogis", "glm", "predict", "colAUC", "binomial"))
+  clusterEvalQ(cl, library(pROC))
+  
+  # Splitting a_values for parallel computation
+  a_values_split <- split(a_values, cut(a_values, no_cores))
+  
+  # Parallel computation
+  auc_results <- parLapply(cl, a_values_split, function(a_chunk) {
+    auc_chunk <- numeric(length(a_chunk))
+    for (i in seq_along(a_chunk)) {
+      a <- a_chunk[i]
+      
+      # Calculate L based on the DGM (data generating mechanism)
+      L <- calculate_linear_predictor10(a, data_experiment, scenario)
+      L <- -mean(L) + L
+      
+      # Generate data based on the DGM
+      y <- ifelse(runif(n) < plogis(L), 1, 0)
+      
+      data_experiment$y <- y
+      
+      model_normal <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10"
+      model_interaction <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor1:predictor2"
+      model_2interaction <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor1:predictor2 + predictor2:predictor3"
+      
+      # Fit a logistic regression model with the correct DGM
+      if (scenario == "normal") {
+        model <- glm(model_normal, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "interaction") {
+        model <- glm(model_interaction, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "2 normal") {
+        model <- glm(model_normal, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "1 interaction & 1 normal") {
+        model <- glm(model_interaction, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "2 interaction") {
+        model <- glm(model_2interaction, data = data_experiment, family = binomial(link = "logit"))
+      }
+      
+      predictions <- predict(model, newdata = data_experiment, type = "response")
+      auc_chunk[i] <- colAUC(predictions, data_experiment$y, plotROC = F)
+    }
+    return(auc_chunk)
+  })
+  
+  stopCluster(cl)
+  
+  # Combine results
+  auc_values <- unlist(auc_results)
+  
+  # Sort auc_values and a_values
+  sorted_data <- data.frame(a = a_values, auc = auc_values)
+  sorted_data <- sorted_data[order(sorted_data$auc), ]
+  
+  # Find "a" values corresponding to AUC thresholds
+  a_0.6 <- sorted_data$a[which.max(sorted_data$auc >= 0.6)]
+  a_0.75 <- sorted_data$a[which.max(sorted_data$auc >= 0.75)]
+  a_0.9 <- sorted_data$a[which.max(sorted_data$auc >= 0.9)]
+  
+  # Create a table with the desired "a" values
+  result_table <- data.frame(
+    AUC = c(0.6, 0.75, 0.9),
+    Coefficient = c(a_0.6, a_0.75, a_0.9)
+  )
+  
+  # Create the plot
+  plot <- create_auc_plot(a_values, auc_values, plot_title)
+  plot <- plot +
+    geom_point(data = result_table, aes(x = Coefficient, y = AUC), color = "red", size = 3)
+  
+  return(list(values = result_table, plot = plot))
+}
+calculate_and_plot_auc20 <- function(plot_title) {
+  scenario <- tolower(unlist(strsplit(plot_title, ":"))[2])
+  scenario <- gsub("^[[:space:]]+", "", scenario) # Remove leading spaces
+  
+  # Parallel setup
+  no_cores <- detectCores() - 1  # Leave one core free for system processes
+  cl <- makeCluster(no_cores)
+  clusterExport(cl, c("calculate_linear_predictor10", "data_experiment", "n", "plogis", "glm", "predict", "colAUC", "binomial"))
+  clusterEvalQ(cl, library(pROC))
+  
+  # Splitting a_values for parallel computation
+  a_values_split <- split(a_values, cut(a_values, no_cores))
+  
+  # Parallel computation
+  auc_results <- parLapply(cl, a_values_split, function(a_chunk) {
+    auc_chunk <- numeric(length(a_chunk))
+    for (i in seq_along(a_chunk)) {
+      a <- a_chunk[i]
+      
+      # Calculate L based on the DGM (data generating mechanism)
+      L <- calculate_linear_predictor10(a, data_experiment, scenario)
+      L <- -mean(L) + L
+      
+      # Generate data based on the DGM
+      y <- ifelse(runif(n) < plogis(L), 1, 0)
+      
+      data_experiment$y <- y
+    
+      model_normal <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10 + predictor11 + predictor12 + predictor13 + predictor14 + predictor15 + predictor16 + predictor17 + predictor18 + predictor19 + predictor20"
+      model_interaction <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10 + predictor11 + predictor12 + predictor13 + predictor14 + predictor15 + predictor16 + predictor17 + predictor18 + predictor19 + predictor1:predictor2"
+      model_2interaction <- "y ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10 + predictor11 + predictor12 + predictor13 + predictor14 + predictor15 + predictor16 + predictor17 + predictor18 + predictor1:predictor2 + predictor2:predictor3"
+      
+      # Fit a logistic regression model with the correct DGM
+      if (scenario == "normal") {
+        model <- glm(model_normal, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "interaction") {
+        model <- glm(model_interaction, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "2 normal") {
+        model <- glm(model_normal, data = data_experiment, family = binomial(link = "logit"))
+      } else if (scenario == "1 interaction & 1 normal") {
+        model <- glm(model_interaction, data = data_experiment, family = binomial(link = "logit")) 
+      } else if (scenario == "2 interaction") {
+        model <- glm(model_2interaction, data = data_experiment, family = binomial(link = "logit"))
+      }
+      
+      predictions <- predict(model, newdata = data_experiment, type = "response")
+      auc_chunk[i] <- colAUC(predictions, data_experiment$y, plotROC = F)
+    }
+    return(auc_chunk)
+  })
+  
+  stopCluster(cl)
+  
+  # Combine results
+  auc_values <- unlist(auc_results)
+  
+  # Sort auc_values and a_values
+  sorted_data <- data.frame(a = a_values, auc = auc_values)
+  sorted_data <- sorted_data[order(sorted_data$auc), ]
+  
+  # Find "a" values corresponding to AUC thresholds
+  a_0.6 <- sorted_data$a[which.max(sorted_data$auc >= 0.6)]
+  a_0.75 <- sorted_data$a[which.max(sorted_data$auc >= 0.75)]
+  a_0.9 <- sorted_data$a[which.max(sorted_data$auc >= 0.9)]
+  
+  # Create a table with the desired "a" values
+  result_table <- data.frame(
+    AUC = c(0.6, 0.75, 0.9),
+    Coefficient = c(a_0.6, a_0.75, a_0.9)
+  )
+  
+  # Create the plot
+  plot <- create_auc_plot(a_values, auc_values, plot_title)
+  plot <- plot +
+    geom_point(data = result_table, aes(x = Coefficient, y = AUC), color = "red", size = 3)
+  
+  return(list(values = result_table, plot = plot))
+}
+

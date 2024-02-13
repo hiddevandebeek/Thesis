@@ -1,0 +1,6 @@
+"Scenario","AUC_0.6","AUC_0.75","AUC_0.9"
+"1 end predictor: normal",0.14,0.39,0.945
+"1 end predictor: interaction",0.115,0.335,0.805
+"2 end predictors: 2 normal",0.15,0.43,1.055
+"2 end predictors: 1 interaction & 1 normal",0.125,0.36,0.88
+"2 end predictors: 2 interaction",0.11,0.31,0.745
