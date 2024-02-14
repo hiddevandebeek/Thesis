@@ -1,0 +1,171 @@
+---
+title: "Simulation 5 predictors"
+author: "Hidde van de Beek"
+date: "2024-01-31"
+output: html_document
+---
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+```
+
+## Setup
+### Libraries
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(caTools)
+library(plotly)
+library(MASS)
+library(matlib)
+library(dplyr)
+library(pROC)
+library(parallel)
+library(CalibrationCurves)
+source("R/Functions.R")
+```
+
+## Covariance
+### Initialize variables
+```{r}
+# Set random seed for reproducibility
+set.seed(28)
+p      <- 1                               # proportion of correlated predictors
+npred  <- 5                               # number of predictors
+z      <- 0.2                             # z 
+n      <- 200000                           # Number of samples in the dataset
+
+# structures
+mu <- c(rep(1,npred))       # vector: means
+sigma <- scenario()         
+```
+
+### Experiment
+```{r}
+data_experiment <- mvrnorm(n, mu = mu, Sigma = sigma) %>%
+  as.data.frame()
+
+# Rename columns to "predictor1", "predictor2" ,...
+colnames(data_experiment) <- c(paste0("predictor", 1:(ncol(data_experiment))))
+
+# provide a_values
+a_values <- seq(from = 0.10, to = 1.1, by = 0.005)
+
+# Define a function to calculate and store "a" values for a scenario
+calculate_and_store_a_values <- function(plot_title) {
+    result <- calculate_and_plot_auc5(plot_title)
+    return(result$values)
+}
+
+# Calculate and store "a" values for different scenarios
+a_value_1end_normal <- calculate_and_store_a_values("AUC vs a Values for 1 end predictor: normal")
+a_value_1end_interaction <- calculate_and_store_a_values("AUC vs a Values for 1 end predictor: interaction")
+a_value_2end_normal <- calculate_and_store_a_values("AUC vs a Values for 2 end predictors: 2 normal")
+a_value_2end_normalinteraction <- calculate_and_store_a_values("AUC vs a Values for 2 end predictors: 1 interaction & 1 normal")
+a_value_2end_interaction <- calculate_and_store_a_values("AUC vs a Values for 2 end predictors: 2 interaction")
+
+# Create a data frame to store all the results
+a_values_5predictors_covariance <- data.frame(
+    Scenario = c(
+        "1 end predictor: normal",
+        "1 end predictor: interaction",
+        "2 end predictors: 2 normal",
+        "2 end predictors: 1 interaction & 1 normal",
+        "2 end predictors: 2 interaction"
+    ),
+    AUC_0.6 = c(
+        a_value_1end_normal$Coefficient[1],
+        a_value_1end_interaction$Coefficient[1],
+        a_value_2end_normal$Coefficient[1],
+        a_value_2end_normalinteraction$Coefficient[1],
+        a_value_2end_interaction$Coefficient[1]
+    ),
+    AUC_0.75 = c(
+        a_value_1end_normal$Coefficient[2],
+        a_value_1end_interaction$Coefficient[2],
+        a_value_2end_normal$Coefficient[2],
+        a_value_2end_normalinteraction$Coefficient[2],
+        a_value_2end_interaction$Coefficient[2]
+    ),
+    AUC_0.9 = c(
+        a_value_1end_normal$Coefficient[3],
+        a_value_1end_interaction$Coefficient[3],
+        a_value_2end_normal$Coefficient[3],
+        a_value_2end_normalinteraction$Coefficient[3],
+        a_value_2end_interaction$Coefficient[3]
+    )
+)
+
+# Save the data frame to a file (e.g., CSV)
+write.csv(a_values_5predictors_covariance, file = "data/simulation/a_values/5predictors_covariance.csv", row.names = FALSE)
+
+# View the data frame
+a_values_5predictors_covariance
+```
+
+## No Covariance
+### Initialize variables
+```{r}
+# Set random seed for reproducibility
+set.seed(28)
+z <- 0                             # z 
+
+# structures
+mu <- c(rep(1,npred))       # vector: means
+sigma <- scenario()   
+```
+
+### Experiment
+```{r}
+data_experiment <- mvrnorm(n, mu = mu, Sigma = sigma) %>%
+  as.data.frame()
+
+# Rename columns to "predictor1", "predictor2" ,...
+colnames(data_experiment) <- c(paste0("predictor", 1:(ncol(data_experiment))))
+
+# provide a_values
+  a_values <- seq(from = 0.11, to = 1.41, by = 0.005)
+
+# Calculate and store "a" values for different scenarios
+a_value_1end_normal <- calculate_and_store_a_values("AUC vs a Values for 1 end predictor: normal")
+a_value_1end_interaction <- calculate_and_store_a_values("AUC vs a Values for 1 end predictor: interaction")
+a_value_2end_normal <- calculate_and_store_a_values("AUC vs a Values for 2 end predictors: 2 normal")
+a_value_2end_normalinteraction <- calculate_and_store_a_values("AUC vs a Values for 2 end predictors: 1 interaction & 1 normal")
+a_value_2end_interaction <- calculate_and_store_a_values("AUC vs a Values for 2 end predictors: 2 interaction")
+
+# Create a data frame to store all the results
+a_values_5predictors_uncorrelated <- data.frame(
+    Scenario = c(
+        "1 end predictor: normal",
+        "1 end predictor: interaction",
+        "2 end predictors: 2 normal",
+        "2 end predictors: 1 interaction & 1 normal",
+        "2 end predictors: 2 interaction"
+    ),
+    AUC_0.6 = c(
+        a_value_1end_normal$Coefficient[1],
+        a_value_1end_interaction$Coefficient[1],
+        a_value_2end_normal$Coefficient[1],
+        a_value_2end_normalinteraction$Coefficient[1],
+        a_value_2end_interaction$Coefficient[1]
+    ),
+    AUC_0.75 = c(
+        a_value_1end_normal$Coefficient[2],
+        a_value_1end_interaction$Coefficient[2],
+        a_value_2end_normal$Coefficient[2],
+        a_value_2end_normalinteraction$Coefficient[2],
+        a_value_2end_interaction$Coefficient[2]
+    ),
+    AUC_0.9 = c(
+        a_value_1end_normal$Coefficient[3],
+        a_value_1end_interaction$Coefficient[3],
+        a_value_2end_normal$Coefficient[3],
+        a_value_2end_normalinteraction$Coefficient[3],
+        a_value_2end_interaction$Coefficient[3]
+    )
+)
+
+# Save the data frame to a file (e.g., CSV)
+write.csv(a_values_5predictors_uncorrelated, file = "data/simulation/a_values/5predictors_uncorrelated.csv", row.names = FALSE)
+
+# View the data frame
+a_values_5predictors_uncorrelated
+```

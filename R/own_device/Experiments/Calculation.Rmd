@@ -1,0 +1,48 @@
+---
+title: "Visualization Report"
+author: "Hidde van de Beek"
+date: "2023-11-20"
+output: html_document
+---
+
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+```
+
+## Libraries
+```{r, message=FALSE, warning=FALSE}
+#library(ggplot2)
+#library(caTools)
+#library(plotly)
+#library(MASS)
+#library(matlib)
+#library(pROC)
+library(parallel)
+#library(CalibrationCurves)
+library(caret)#
+library(tidyverse)#
+library(rms)#
+source("R/functions.R")
+```
+
+
+### Experiment: Covariance, 1 end predictor
+```{r}
+data <- readRDS("data/simulation/datasets/5pred/covar/AUC_0.6_1normal.rds")
+system.time(matrix <- compare_models_05(data, perc_ones = 0.5))
+system.time(matrix2 <- compare_models_05_mclapply(data, perc_ones = 0.5))
+
+compare_models_05(data, perc_ones = 0.2)
+compare_models_05(data, perc_ones = 0.05)
+
+data <- readRDS("data/simulation/datasets/5pred/covar/AUC_0.75_1normal.rds")
+compare_models_05(data, perc_ones = 0.5)
+compare_models_05(data, perc_ones = 0.2)
+compare_models_05(data, perc_ones = 0.05)
+
+data <- readRDS("data/simulation/datasets/5pred/covar/AUC_0.9_1normal.rds")
+compare_models_05(data, perc_ones = 0.5)
+compare_models_05(data, perc_ones = 0.2)
+compare_models_05(data, perc_ones = 0.05)
+```
+
