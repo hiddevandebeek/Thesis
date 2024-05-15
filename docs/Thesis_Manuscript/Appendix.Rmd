@@ -1,0 +1,371 @@
+\appendix
+
+\section{Scenario 1: including predictors}\label{appendix:scenario1}
+\
+In the following figures we show all the results of the first scenario, where we want to correctly include the candidate predictors in the model. The models that create the data are shown in the method section. These figures show the success rate of the IC and internal performance measures for the different models. The success rate is calculated as the proportion of times the IC and internal performance measures select the correct model. The figures also show the test AUC of the IC and internal performance measures for the different models. The test AUC is calculated as the AUC of the model selected by the IC and internal performance measures when validated on the test set.
+
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/percentage_5pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_5)$ model with $X_5$ as candidate predictor.}
+\label{fig:figure-appendix1}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/auc_5pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_5)$ model with $X_5$ as the candidate predictor.}
+\label{fig:figure-appendix2}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/percentage_5pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_1X_2)$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix3}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/auc_5pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_1X_2)$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix4}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/percentage_5pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_5)$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix5}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/auc_5pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_5)$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix6}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/percentage_5pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_1X_2 + 0.5*X_2X_3)$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix7}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/auc_5pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_1X_2 + 0.5*X_2X_3)$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix8}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/percentage_5pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X4 + 0.5*X_1X_2)$ model with $X_4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix9}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/auc_5pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_1X_2)$ model with $X_4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix10}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/percentage_10pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_5 + X_6 ... X_{10})$ model with $X_5$ as the candidate predictor.}
+\label{fig:figure-appendix21}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/auc_10pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_5 + X_6 ... X_{10})$ model with $X_5$ as the candidate predictor.}
+\label{fig:figure-appendix22}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/percentage_10pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_1X_2 + X_6 ... X_{10})$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix23}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/auc_10pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_1X_2 + X_6 ... X_{10})$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix24}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/percentage_10pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_5 + X_6 ... X_{10})$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix25}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/auc_10pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_5 + X_6 ... X_{10})$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix26}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/percentage_10pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_1X_2 + 0.5*X_2X_3 + X_6 ... X_{10})$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix27}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/auc_10pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_1X_2 + 0.5*X_2X_3 + X_6 ... X_{10})$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix28}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/percentage_10pred.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_1X_2 + X_6 ... X_{10})$ model with $X_4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix29}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/auc_10pred.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_1X_2 + X_6 ... X_{10})$ model with $X_4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix30}
+\end{figure}
+```
+\newpage
+
+\section{Scenario 2: excluding predictors}\label{appendix:scenario2}
+\
+In the following figures we show all the results of the second scenario, where we want to correctly exclude the candidate predictors in the model. The models that create the data are shown in the method section. These figures show the success rate of the IC and internal performance measures for the different models. The success rate is calculated as the proportion of times the IC and internal performance measures select the correct model. The figures also show the test AUC of the IC and internal performance measures for the different models. The test AUC is calculated as the AUC of the model selected by the IC and internal performance measures when validated on the test set.
+
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/percentage_5pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4)$ model with $X_5$ as the candidate predictor.}
+\label{fig:figure-appendix11}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/auc_5pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4)$ model with $X_5$ as the candidate predictor.}
+\label{fig:figure-appendix12}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/percentage_5pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4)$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix13}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/auc_5pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4)$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix14}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/percentage_5pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3)$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix15}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/auc_5pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3)$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix16}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/percentage_5pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3)$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix17}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/auc_5pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3)$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix18}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/percentage_5pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3)$ model with $X4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix19}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/auc_5pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3)$ model with $X_4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix20}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/percentage_10pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + X_6 ... X_{10})$ model with $X_5$ as the candidate predictor.}
+\label{fig:figure-appendix31}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/normal/auc_10pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + X_6 ... X_{10})$ model with $X_5$ as the candidate predictor.}
+\label{fig:figure-appendix32}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/percentage_10pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + X_6 ... X_{10})$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix33}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/interaction/auc_10pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + X_6 ... X_{10})$ model with $X_1X_2$ as the candidate predictor.}
+\label{fig:figure-appendix34}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/percentage_10pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_6 ... X_{10})$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix35}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normal/auc_10pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_6 ... X_{10})$ model with $X_4$ and $X_5$ as the candidate predictors.}
+\label{fig:figure-appendix36}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/percentage_10pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_6 ... X_{10})$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix37}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2interaction/auc_10pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_6 ... X_{10})$ model with $X_1X_2$ and $X_2X_3$ as the candidate predictors.}
+\label{fig:figure-appendix38}
+\end{figure}
+```
+\clearpage
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/percentage_10pred_anti.png}
+\caption{Success rate of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_6 ... X_{10})$ model with $X_4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix39}
+\end{figure}
+```
+\clearpage 
+```{=tex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{plots/appendix/2normalinteraction/auc_10pred_anti.png}
+\caption{Test AUC of IC and internal performance measures for the $\beta_0 + \beta(X_1 + X_2 + X_3 + X_6 ... X_{10})$ model with $X_4$ and $X_1X_2$ as the candidate predictors.}
+\label{fig:figure-appendix40}
+\end{figure}
+```
+\newpage
