@@ -1,4 +1,2 @@
 /Users/hiddevandebeek/Documents/Documents[[:space:]]-[[:space:]]Hidde’s[[:space:]]MacBook[[:space:]]Pro/Github/Thesis/data/datasets/full_data/5pred/covar/data_predictors.rds filter=lfs diff=lfs merge=lfs -text
 /Users/hiddevandebeek/Documents/Documents[[:space:]]-[[:space:]]Hidde’s[[:space:]]MacBook[[:space:]]Pro/Github/Thesis/data/datasets/full_data/10pred/covar/data_predictors.rds filter=lfs diff=lfs merge=lfs -text
-*.psd filter=lfs diff=lfs merge=lfs -text
-*.rds filter=lfs diff=lfs merge=lfs -text
