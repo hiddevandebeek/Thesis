@@ -1,0 +1,238 @@
+---
+title: "check"
+author: "Hidde van de Beek"
+date: "2024-04-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(parallel)
+library(tidyverse)
+library(rms)
+library(MASS)
+library(caTools)
+```
+
+# 5 pred
+```{r}
+pred <- paste0("5pred")
+var <- paste0("covar")
+data <- readRDS(paste0(pred, "/", var,"/data_predictors.rds"))
+```
+
+## normal
+```{r}
+scenariopaste <- paste0("1normal")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+```
+
+
+## interaction
+```{r}
+scenariopaste <- paste0("1interaction")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor1:predictor2, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor1:predictor2, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor1:predictor2, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 +  predictor1:predictor2, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 +  predictor1:predictor2, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 +  predictor1:predictor2, data = data_temp, x = TRUE, y = TRUE)
+```
+
+## 2 normal
+```{r}
+scenariopaste <- paste0("2normal")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5, data = data_temp, x = TRUE, y = TRUE)
+```
+
+## 2 interaction
+```{r}
+scenariopaste <- paste0("2interaction")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3, data = data_temp, x = TRUE, y = TRUE)
+```
+## 2 Normal + Interaction
+```{r}
+scenariopaste <- paste0("2normalinteraction")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4, data = data_temp, x = TRUE, y = TRUE)
+```
+
+# 10 pred
+```{r}
+pred <- paste0("10pred")
+data <- readRDS(paste0(pred, "/", var,"/data_predictors.rds"))
+```
+
+## normal
+```{r}
+scenariopaste <- paste0("1normal")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+
+
+## interaction
+```{r}
+scenariopaste <- paste0("1interaction")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor1:predictor2 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor1:predictor2 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor1:predictor2 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 +  predictor1:predictor2 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 +  predictor1:predictor2 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 +  predictor1:predictor2 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+
+## 2 normal
+```{r}
+scenariopaste <- paste0("2normal")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor4 + predictor5 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+
+## 2 interaction
+```{r}
+scenariopaste <- paste0("2interaction")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor2:predictor3 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+## 2 Normal + Interaction
+```{r}
+scenariopaste <- paste0("2normalinteraction")
+```
+### complex
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, ".rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
+### anti
+```{r}
+y <- readRDS(paste0(pred, "/", var, "/", scenariopaste, "_anti.rds"))
+data_temp <- as.data.frame(cbind(data, y))
+lrm(y_0.9 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.75 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+lrm(y_0.6 ~ predictor1 + predictor2 + predictor3 + predictor1:predictor2 + predictor4 + predictor6 + predictor7 + predictor8 + predictor9 + predictor10, data = data_temp, x = TRUE, y = TRUE)
+```
