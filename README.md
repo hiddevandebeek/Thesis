@@ -16,7 +16,7 @@ Email: h.vandebeek@uu.nl
 | [`analysis template`](scripts/hpc/execute_analysis_template.R) | This is the code that provides a template for the analysis of the different data generating mechanisms. |
 | [`visualize results`](./scripts/own_device) | In this folder you will find two R-scripts that are used for the visualize the analysis for the Results section and Appendix.|
 | [`functions`](./scripts/shared/functions.R) | This R file contains all created R functions in the different files of data generation, analysis, and visualization.|
-| [`manuscript`](./docs/Thesis_Manuscript) | In this folder, you will find all necessary files to generate the [`manuscript`](./docs/Thesis_Manuscript/Thesis-Manuscript.pdf)|
+| [`manuscript`](./docs/Thesis_Manuscript) | In this folder, you will find all necessary files to generate the [`Thesis`](./docs/Thesis_Manuscript/Thesis-Manuscript.pdf)|
 | [`Population data`](./data/full_data) | In this folder you can find all population data for the 5- and 10-predictor models per data generating mechansim. |
 | [`Analysis data`](./data/analysis) | In this folder you can find all data for the 5- and 10-predictor models per data generating mechansim after the analysis is performed. |
 
@@ -41,19 +41,19 @@ In the following models the candidate predictors contribute in the data generati
 
 In the following models the candidate predictors do not contribute in the data generating mechanism, however they are named the same as above, with the added "_anti" in their filename
 ```math
-\mathrm{Model \ \  1:} \beta_0 + \beta(X_1 + X_2 + X_3 + X_4)
+\mathrm{Model \ \  1:} \beta_0 + \beta(X_1 + X_2 + X_3 + X_4) | \mathrm{(1normal)}
 ```
 ```math
-\mathrm{Model \ \  2:} \beta_0 + \beta(X_1 + X_2 + X_3 + X_4)
+\mathrm{Model \ \  2:} \beta_0 + \beta(X_1 + X_2 + X_3 + X_4) | \mathrm{(1interaction)}
 ```
 ```math
-\mathrm{Model \ \  3:} \beta_0 + \beta(X_1 + X_2 + X_3)
+\mathrm{Model \ \  3:} \beta_0 + \beta(X_1 + X_2 + X_3) | \mathrm{(2normal)}
 ```
 ```math
-\mathrm{Model \ \  4:} \beta_0 + \beta(X_1 + X_2 + X_3)
+\mathrm{Model \ \  4:} \beta_0 + \beta(X_1 + X_2 + X_3) | \mathrm{(2normalinteraction)}
 ```
 ```math
-\mathrm{Model \ \  5:} \beta_0 + \beta(X_1 + X_2 + X_3)
+\mathrm{Model \ \  5:} \beta_0 + \beta(X_1 + X_2 + X_3) | \mathrm{(2interaction)}
 ```
 
 
