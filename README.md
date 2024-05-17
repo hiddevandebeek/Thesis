@@ -10,13 +10,13 @@ Email: h.vandebeek@uu.nl
 
 | File / Folder                              | Contents                                                         |
 | :----------------------------------------- | :--------------------------------------------------------------- |
-| [`LICENSE`](./LICENSE)                     | The contents of this repository are made publicly available unter a `GNU General Public License v3.0`. Please see this document for details. |
+| [`License`](./LICENSE)                     | The contents of this repository are made publicly available unter a `GNU General Public License v3.0`. Please see this document for details. |
 | [`5-predictor population code`](./scripts/hpc/generate_data_5predictors.R) | This is the code that simulated the 5-predictor populations using five different data generating mechanisms. |
 | [`10-predictor population code`](./scripts/hpc/generate_data_10predictors.R) | This is the code that simulated the 10-predictor populations using five different data generating mechanisms. |
-| [`analysis template`](scripts/hpc/execute_analysis_template.R) | This is the code that provides a template for the analysis of the different data generating mechanisms. |
-| [`visualize results`](./scripts/own_device) | In this folder you will find two R-scripts that are used for the visualize the analysis for the Results section and Appendix.|
-| [`functions`](./scripts/shared/functions.R) | This R file contains all created R functions in the different files of data generation, analysis, and visualization.|
-| [`manuscript`](./docs/Thesis_Manuscript) | In this folder, you will find all necessary files to generate the [`Thesis`](./docs/Thesis_Manuscript/Thesis-Manuscript.pdf)|
+| [`Analysis template`](scripts/hpc/execute_analysis_template.R) | This is the code that provides a template for the analysis of the different data generating mechanisms. |
+| [`Visualize results`](./scripts/own_device) | In this folder you will find two R-scripts that are used for the visualize the analysis for the Results section and Appendix.|
+| [`Functions`](./scripts/shared/functions.R) | This R file contains all created R functions in the different files of data generation, analysis, and visualization.|
+| [`Mnuscript`](./docs/Thesis_Manuscript) | In this folder, you will find all necessary files to generate the [`Thesis`](./docs/Thesis_Manuscript/Thesis-Manuscript.pdf)|
 | [`Population data`](./data/datasets/full_data) | In this folder you can find all population data for the 5- and 10-predictor models per data generating mechansim. |
 | [`Analysis data`](./data/analysis) | In this folder you can find all data for the 5- and 10-predictor models per data generating mechansim after the analysis is performed. |
 
