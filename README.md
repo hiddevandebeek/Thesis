@@ -17,7 +17,7 @@ Email: h.vandebeek@uu.nl
 | [`visualize results`](./scripts/own_device) | In this folder you will find two R-scripts that are used for the visualize the analysis for the Results section and Appendix.|
 | [`functions`](./scripts/shared/functions.R) | This R file contains all created R functions in the different files of data generation, analysis, and visualization.|
 | [`manuscript`](./docs/Thesis_Manuscript) | In this folder, you will find all necessary files to generate the [`Thesis`](./docs/Thesis_Manuscript/Thesis-Manuscript.pdf)|
-| [`Population data`](./data/full_data) | In this folder you can find all population data for the 5- and 10-predictor models per data generating mechansim. |
+| [`Population data`](./data/datasets/full_data) | In this folder you can find all population data for the 5- and 10-predictor models per data generating mechansim. |
 | [`Analysis data`](./data/analysis) | In this folder you can find all data for the 5- and 10-predictor models per data generating mechansim after the analysis is performed. |
 
 
