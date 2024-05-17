@@ -101,7 +101,7 @@ To simulate a range of different contexts, we created several models. The effect
 &\mathrm{Model \ \  2:} \beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_1X_2) \\
 &\mathrm{Model \ \  3:} \beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_5) \\
 &\mathrm{Model \ \  4:} \beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_4 + 0.5*X_1X_2)\\
-&\mathrm{Model \ \  5:} \beta_0 + \beta(X_1 + X_2 + X_3 + X_4 + 0.5*X_1X_2 + 0.5*X_2X_3)
+&\mathrm{Model \ \  5:} \beta_0 + \beta(X_1 + X_2 + X_3 + 0.5*X_1X_2 + 0.5*X_2X_3)
 \end{align*}
 ```
 
